@@ -32,5 +32,19 @@ namespace ShopTARge24.Controllers
 
             return View(result);
         }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            SpaceshipCreateViewModel result = new();
+
+            return View("Create", result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create()
+        {
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

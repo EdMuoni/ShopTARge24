@@ -1,6 +1,6 @@
-﻿namespace ShopTARge24.Core.Domain
+﻿namespace ShopTARge24.Models.Spaceships
 {
-    public class Spaceships
+    public class SpaceshipCreateViewModel
     {
         public Guid? Id { get; set; }
         public string? Name { get; set; }
