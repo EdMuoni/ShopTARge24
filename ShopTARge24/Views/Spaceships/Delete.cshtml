@@ -59,5 +59,15 @@
             <label asp-for="ModifiedAt" class="col-sm-2 col-form-label"></label>
             @Html.DisplayFor(model => model.ModifiedAt)
         </div>
-    </dl>   
+    </dl>
+    
+    <hr />
+    <form asp-action="DeleteConfirmation">
+        <input type="hidden" asp-for="Id"/>
+        <input type="submit" value="Delete" class="btn btn-danger" />  
+        <a asp-action="Index" asp-controller="spaceships" class="btn btn-success">Back</a>
+    </form>
+
+  
+        
 </div>
