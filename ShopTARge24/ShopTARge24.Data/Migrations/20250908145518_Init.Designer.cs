@@ -11,7 +11,7 @@ using ShopTARge24.Data;
 
 namespace ShopTARge24.Data.Migrations
 {
-    [DbContext(typeof(ShopTARge24Context))]
+    [DbContext(typeof(KindergartenContext))]
     [Migration("20250908145518_Init")]
     partial class Init
     {
