@@ -13,9 +13,25 @@ namespace Kindergarten.Controllers
 
     public class KindergartenController : Controller
     {
+        private readonly KindergartenContext _context;
+        public KindergartenController(KindergartenContext context)
+        {
+            _context = context;
+        }
         public IActionResult Index()
         {
-            return View();
+            var result = _context.Kindergartens
+                .Select(x => new KindergartenIndexViewModel
+                {
+                    Id = x.Id,
+                    GroupName = x.GroupName,
+                    ChildrenCount = x.ChildrenCount,
+                    KindergartenName = x.KindergartenName,
+                    TeacherName = x.TeacherName,
+                    CreatedAt = x.CreatedAt,
+                    UpdateAt = x.UpdateAt
+                });
+            return View(result);
         }
     }
 }
