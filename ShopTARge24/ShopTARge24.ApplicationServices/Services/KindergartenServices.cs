@@ -33,7 +33,7 @@ namespace ShopTARge24.ApplicationServices.Services
             kindergartens.KindergartenName = dto.KindergartenName;
             kindergartens.TeacherName = dto.TeacherName;
             kindergartens.CreatedAt = DateTime.Now;
-            kindergartens.UpdateAt = DateTime.Now;
+            kindergartens.UpdatedAt = DateTime.Now;
 
             await _context.Kindergartens.AddAsync(kindergartens);
             await _context.SaveChangesAsync();
@@ -52,7 +52,7 @@ namespace ShopTARge24.ApplicationServices.Services
             kindergartens.KindergartenName = dto.KindergartenName;
             kindergartens.TeacherName = dto.TeacherName;
             kindergartens.CreatedAt = DateTime.Now;
-            kindergartens.UpdateAt = DateTime.Now;
+            kindergartens.UpdatedAt = DateTime.Now;
 
             //tuleb db-s teha andmete uuendamine jauue oleku salvestamine
             _context.Kindergartens.Update(kindergartens);

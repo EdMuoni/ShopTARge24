@@ -36,7 +36,7 @@ namespace ShopTARge24.Controllers
                     KindergartenName = x.KindergartenName,
                     TeacherName = x.TeacherName,
                     CreatedAt = x.CreatedAt,
-                    UpdateAt = x.UpdateAt
+                    UpdatedAt = x.UpdatedAt
                 })
                 .ToListAsync();
 

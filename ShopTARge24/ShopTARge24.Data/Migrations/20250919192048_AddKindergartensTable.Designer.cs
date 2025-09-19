@@ -12,8 +12,8 @@ using ShopTARge24.Data;
 namespace ShopTARge24.Data.Migrations
 {
     [DbContext(typeof(KindergartenContext))]
-    [Migration("20250908145518_Init")]
-    partial class Init
+    [Migration("20250919192048_AddKindergartensTable")]
+    partial class AddKindergartensTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,36 +25,36 @@ namespace ShopTARge24.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ShopTARge24.Core.Domain.Spaceships", b =>
+            modelBuilder.Entity("ShopTARge24.Core.Domain.Kindergarten", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("BuiltDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Classification")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("Crew")
+                    b.Property<int>("ChildrenCount")
                         .HasColumnType("int");
 
-                    b.Property<int?>("EnginePower")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ModifiedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("GroupName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("KindergartenName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TeacherName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdateAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Spaceships");
+                    b.ToTable("Kindergartens");
                 });
 #pragma warning restore 612, 618
         }
