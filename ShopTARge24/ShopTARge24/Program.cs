@@ -8,10 +8,23 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// Register the Spaceship service for dependency injection.
 builder.Services.AddScoped<ISpaceshipServices, SpaceshipServices>();
 
+// This line was added to register the Kindergarten service for dependency injection.
+// This resolves the "could not be found" and "no implicit conversion" errors.
+builder.Services.AddScoped<IKindergartenServices, KindergartenServices>();
+
+// This line registers the main database context for Spaceships.
 builder.Services.AddDbContext<ShopTARge24Context>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+        b => b.MigrationsAssembly("ShopTARge24.Data")));
+
+// This line was added to register the Kindergarten database context.
+// This resolves the "Unable to resolve service" error for KindergartenContext.
+builder.Services.AddDbContext<KindergartenContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+        b => b.MigrationsAssembly("ShopTARge24.Data")));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

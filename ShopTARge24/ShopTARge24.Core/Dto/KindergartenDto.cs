@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ShopTARge24.Core.Dto
 {
-    internal class KindergartenDto
+    public class KindergartenDto
     {
         public Guid Id { get; set; }
         public string GroupName { get; set; }
