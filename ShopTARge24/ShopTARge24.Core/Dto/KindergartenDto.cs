@@ -1,6 +1,12 @@
-﻿namespace ShopTARge24.Models.Kindergarten
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ShopTARge24.Core.Dto
 {
-    public class KindergartenIndexViewModel
+    internal class KindergartenDto
     {
         public Guid Id { get; set; }
         public string GroupName { get; set; }

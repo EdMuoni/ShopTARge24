@@ -1,33 +1,35 @@
-﻿@model IEnumerable<ShopTARge24.Models.Spaceships.SpaceshipIndexViewModel>
+﻿@model IEnumerable<ShopTARge24.Models.Kindergarten.KindergartenIndexViewModel>
 
 @{
     int rowNumber = 1;
 }
 
-<div>
+<div class="mb-3">
     <a asp-action="create" asp-controller="Kindergarten" type="submit" class="btn btn-primary">Create</a>
 </div>
 
-<div class="h1">
+<h1 class="h3 mb-3">
     Kindergarten
-</div>
+</h1>
 <form method="get">
     <table class="table table-hover">
         <thead>
             <tr>
                 <th scope="col">Nr</th>
-                <th scope="col">Name</th>
-                <th scope="col">Type</th>
-                <th scope="col">Built Date</th>
-                <th scope="col">Crew</th>
-                <th scope="col"></th>
+                <th scope="col">GroupName</th>
+                <th scope="col">ChildrenCount</th>
+                <th scope="col">KindergartenName</th>
+                <th scope="col">TeacherName</th>
+                <th scope="col">Created At</th>
+                <th scope="col">Updated At</th>
+                <th scope="col">Actions</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var kindergarten in Model)
             {
                 <tr>
-                    <td>@rowNumber</td>
+                    <td>@(rowNumber++)</td>
                     <td>@kindergarten.GroupName</td>
                     <td>@kindergarten.ChildrenCount</td>
                     <td>@kindergarten.KindergartenName</td>
@@ -40,7 +42,6 @@
                         <a asp-action="delete" asp-controller="kindergarten" asp-route-id="@kindergarten.Id" class="btn btn-outline-danger">Delete</a>
                     </td>
                 </tr>
-                rowNumber += 1;
             }
         </tbody>
     </table>
