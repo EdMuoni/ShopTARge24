@@ -42,7 +42,7 @@ namespace ShopTARge24.ApplicationServices.Services
         {
             Kindergartens kindergartens = new Kindergartens();
 
-            kindergartens.Id = Guid.NewGuid();
+            kindergartens.Id = dto.Id;
             kindergartens.GroupName = dto.GroupName;
             kindergartens.ChildrenCount = dto.ChildrenCount;
             kindergartens.KindergartenName = dto.KindergartenName;
