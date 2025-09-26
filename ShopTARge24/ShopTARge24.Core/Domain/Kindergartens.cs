@@ -1,8 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace ShopTARge24.Models.Kindergartens
+﻿namespace ShopTARge24.Core.Domain
 {
-    public class KindergartenDetailsViewModel
+    public class Kindergartens
     {
         public Guid? Id { get; set; }
         public string? GroupName { get; set; }

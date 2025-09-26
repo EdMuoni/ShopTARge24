@@ -1,10 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ShopTARge24.Models.Kindergartens
 {
     public class KindergartenIndexViewModel
     {
-        public IEnumerable<Kindergarten> Items { get; set; } = new List<Kindergarten>();
-        public string? Search { get; set; }
+        public Guid? Id { get; set; }
+        public string? GroupName { get; set; }
+        public int? ChildrenCount { get; set; }
+        public string? KindergartenName { get; set; }
+        public string? TeacherName { get; set; }
+        public DateTime? CreatedAt { get; set; }
     }
 }
