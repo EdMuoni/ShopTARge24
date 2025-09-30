@@ -39,35 +39,6 @@ namespace ShopTARge24.Data.Migrations
                     b.ToTable("FileToApis");
                 });
 
-            modelBuilder.Entity("ShopTARge24.Core.Domain.Kindergartens", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("ChildrenCount")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("GroupName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("KindergartenName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TeacherName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Kindergartens");
-                });
-
             modelBuilder.Entity("ShopTARge24.Core.Domain.Spaceships", b =>
                 {
                     b.Property<Guid>("Id")
