@@ -12,7 +12,6 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<ISpaceshipServices, SpaceshipServices>();
 builder.Services.AddScoped<IFileServices, FileServices>();
-builder.Services.AddScoped<IKindergartenServices, KindergartenServices>();
 
 builder.Services.AddDbContext<ShopTARge24Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -34,12 +33,7 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(builder.Environment.ContentRootPath, "multipleFileUpload")),
-    RequestPath = "/multipleFileUpload"
-});
+app.UseStaticFiles();
 
 app.MapControllerRoute(
     name: "default",

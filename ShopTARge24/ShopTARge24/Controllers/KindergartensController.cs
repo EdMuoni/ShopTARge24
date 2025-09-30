@@ -36,6 +36,8 @@ namespace ShopTARge24.Controllers
                     ChildrenCount = x.ChildrenCount,
                     KindergartenName = x.KindergartenName,
                     TeacherName = x.TeacherName,
+                    CreatedAt = x.CreatedAt,
+                    UpdatedAt = x.UpdatedAt,
                 });
 
             return View(result);
