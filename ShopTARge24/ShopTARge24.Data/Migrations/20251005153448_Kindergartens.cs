@@ -11,6 +11,7 @@ namespace ShopTARge24.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+
             migrationBuilder.CreateTable(
                 name: "Kindergartens",
                 columns: table => new
