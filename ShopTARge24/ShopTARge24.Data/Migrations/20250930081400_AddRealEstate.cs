@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ShopTARge24.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class FileToApp : Migration
+    public partial class AddRealEstate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,6 +22,23 @@ namespace ShopTARge24.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FileToApis", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RealEstates",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Area = table.Column<double>(type: "float", nullable: true),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RoomNumber = table.Column<int>(type: "int", nullable: true),
+                    BuildingType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RealEstates", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -48,6 +65,9 @@ namespace ShopTARge24.Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "FileToApis");
+
+            migrationBuilder.DropTable(
+                name: "RealEstates");
 
             migrationBuilder.DropTable(
                 name: "Spaceships");

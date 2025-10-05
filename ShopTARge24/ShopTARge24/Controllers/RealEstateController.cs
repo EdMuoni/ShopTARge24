@@ -1,43 +1,46 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ShopTARge24.ApplicationServices.Services;
 using ShopTARge24.Core.Domain;
 using ShopTARge24.Core.Dto;
 using ShopTARge24.Core.ServiceInterface;
 using ShopTARge24.Data;
-using ShopTARge24.Models.Spaceships;
+using ShopTARge24.Models.RealEstate;
+using System.Xml;
 
 
 namespace ShopTARge24.Controllers
 {
-    public class SpaceshipsController : Controller
+    public class RealEstateController : Controller
     {
         private readonly ShopTARge24Context _context;
-        private readonly ISpaceshipServices _spaceshipServices;
+        private readonly IRealEstateServices _realestateServices;
         private readonly IFileServices _fileServices;
 
-        public SpaceshipsController
+        public RealEstateController
             (
                 ShopTARge24Context context,
-                ISpaceshipServices spaceshipServices,
+                IRealEstateServices realestateServices,
                 IFileServices fileServices
             )
         {
             _context = context;
-            _spaceshipServices = spaceshipServices;
+            _realestateServices = realestateServices;
             _fileServices = fileServices;
         }
 
 
         public IActionResult Index()
         {
-            var result = _context.Spaceships
-                .Select(x => new SpaceshipIndexViewModel
+            var result = _context.RealEstates
+                .Select(x => new RealEstateIndexViewModel
                 {
                     Id = x.Id,
-                    Name = x.Name,
-                    Classification = x.Classification,
-                    BuiltDate = x.BuiltDate,
-                    Crew = x.Crew,
+                    Area = x.Area,
+                    Location = x.Location,
+                    RoomNumber = x.RoomNumber,
+                    BuildingType = x.BuildingType,
                 });
 
             return View(result);
@@ -46,36 +49,35 @@ namespace ShopTARge24.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            SpaceshipCreateUpdateViewModel result = new();
+            RealEstateCreateUpdateViewModel result = new();
 
             return View("CreateUpdate", result);
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> Create(SpaceshipCreateUpdateViewModel vm)
+        public async Task<IActionResult> Create(RealEstateCreateUpdateViewModel vm)
         {
-            var dto = new SpaceshipDto()
+            var dto = new RealEstateDto()
             {
                 Id = vm.Id,
-                Name = vm.Name,
-                Classification = vm.Classification,
-                BuiltDate = vm.BuiltDate,
-                Crew = vm.Crew,
-                EnginePower = vm.EnginePower,
+                Area = vm.Area,
+                Location = vm.Location,
+                RoomNumber = vm.RoomNumber,
+                BuildingType = vm.BuildingType,
                 CreatedAt = vm.CreatedAt,
                 ModifiedAt = vm.ModifiedAt,
                 Files = vm.Files,
-                FileToApiDtos = vm.Image
+                FileToApiDtos = vm.Images
                     .Select(x => new FileToApiDto
                     {
                         Id = x.ImageId,
                         ExistingFilePath = x.Filepath,
-                        SpaceshipId = x.SpaceshipId
+                        RealEstateId = x.RealEstateId
                     }).ToArray()
             };
 
-            var result = await _spaceshipServices.Create(dto);
+            var result = await _realestateServices.Create(dto);
 
             if (result == null)
             {
@@ -88,60 +90,58 @@ namespace ShopTARge24.Controllers
         [HttpGet]
         public async Task<IActionResult> Update(Guid id)
         {
-            var spaceship = await _spaceshipServices.DetailAsync(id);
+            var realestate = await _realestateServices.DetailAsync(id);
 
-            if (spaceship == null)
+            if (realestate == null)
             {
                 return NotFound();
             }
 
             var images = await _context.FileToApis
-                .Where(x => x.SpaceshipId == id)
+                .Where(x => x.RealEstateId == id)
                 .Select(y => new ImageViewModel
                 {
                     Filepath = y.ExistingFilePath,
                     ImageId = y.Id
                 }).ToArrayAsync();
 
-            var vm = new SpaceshipCreateUpdateViewModel();
+            var vm = new RealEstateCreateUpdateViewModel();
 
-            vm.Id = spaceship.Id;
-            vm.Name = spaceship.Name;
-            vm.Classification = spaceship.Classification;
-            vm.BuiltDate = spaceship.BuiltDate;
-            vm.Crew = spaceship.Crew;
-            vm.EnginePower = spaceship.EnginePower;
-            vm.CreatedAt = spaceship.CreatedAt;
-            vm.ModifiedAt = spaceship.ModifiedAt;
-            vm.Image.AddRange(images);
+                vm. Id = realestate.Id;
+                vm.Area = realestate.Area;
+                vm.Location = realestate.Location;
+                vm.RoomNumber = realestate.RoomNumber;
+                vm.BuildingType = realestate.BuildingType;
+                vm.CreatedAt = realestate.CreatedAt;
+                vm.ModifiedAt = realestate.ModifiedAt;
+                vm.Images.AddRange(images);
 
             return View("CreateUpdate", vm);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(SpaceshipCreateUpdateViewModel vm)
+        public async Task<IActionResult> Update(RealEstateCreateUpdateViewModel vm)
         {
-            var dto = new SpaceshipDto()
+            var dto = new RealEstateDto()
             {
                 Id = vm.Id,
-                Name = vm.Name,
-                Classification = vm.Classification,
-                BuiltDate = vm.BuiltDate,
-                Crew = vm.Crew,
-                EnginePower = vm.EnginePower,
+                Area = vm.Area,
+                Location = vm.Location,
+                RoomNumber = vm.RoomNumber,
+                BuildingType = vm.BuildingType,
                 CreatedAt = vm.CreatedAt,
                 ModifiedAt = vm.ModifiedAt,
                 Files = vm.Files,
-                FileToApiDtos = vm.Image
+                FileToApiDtos = vm.Images
                     .Select(x => new FileToApiDto
                     {
                         Id = x.ImageId,
                         ExistingFilePath = x.Filepath,
-                        SpaceshipId = x.SpaceshipId
+                        RealEstateId = x.RealEstateId
                     }).ToArray()
             };
 
-            var result = await _spaceshipServices.Update(dto);
+            var result = await _realestateServices.Update(dto);
 
             if (result == null)
             {
@@ -154,31 +154,30 @@ namespace ShopTARge24.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var spaceship = await _spaceshipServices.DetailAsync(id);
+            var realestate = await _realestateServices.DetailAsync(id);
 
-            if (spaceship == null)
+            if (realestate == null)
             {
                 return NotFound();
             }
 
             var images = await _context.FileToApis
-                .Where(x => x.SpaceshipId == id)
+                .Where(x => x.RealEstateId == id)
                 .Select(y => new ImageViewModel
                 {
                     Filepath = y.ExistingFilePath,
                     ImageId = y.Id
                 }).ToArrayAsync();
 
-            var vm = new SpaceshipDeleteViewModel();
+            var vm = new RealEstateDeleteViewModel();
 
-            vm.Id = spaceship.Id;
-            vm.Name = spaceship.Name;
-            vm.Classification = spaceship.Classification;
-            vm.BuiltDate = spaceship.BuiltDate;
-            vm.Crew = spaceship.Crew;
-            vm.EnginePower = spaceship.EnginePower;
-            vm.CreatedAt = spaceship.CreatedAt;
-            vm.ModifiedAt = spaceship.ModifiedAt;
+            vm.Id = realestate.Id;
+            vm.Area = realestate.Area;
+            vm.Location = realestate.Location;
+            vm.RoomNumber = realestate.RoomNumber;
+            vm.BuildingType = realestate.BuildingType;
+            vm.CreatedAt = realestate.CreatedAt;
+            vm.ModifiedAt = realestate.ModifiedAt;
             vm.ImageViewModels.AddRange(images);
 
             return View(vm);
@@ -187,9 +186,9 @@ namespace ShopTARge24.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmation(Guid id)
         {
-            var spaceship = await _spaceshipServices.Delete(id);
+            var realestate = await _realestateServices.Delete(id);
 
-            if (spaceship == null)
+            if (realestate == null)
             {
                 return RedirectToAction(nameof(Index));
             }
@@ -202,15 +201,15 @@ namespace ShopTARge24.Controllers
         public async Task<IActionResult> Details(Guid id)
         {
             //kasutada service classi meetodit, et info k'tte saada
-            var spaceship = await _spaceshipServices.DetailAsync(id);
+            var realestate = await _realestateServices.DetailAsync(id);
 
-            if(spaceship == null)
+            if (realestate == null)
             {
                 return NotFound();
             }
 
             var images = await _context.FileToApis
-                .Where(x => x.SpaceshipId == id)
+                .Where(x => x.RealEstateId == id)
                 .Select(y => new ImageViewModel
                 {
                     Filepath = y.ExistingFilePath,
@@ -218,16 +217,15 @@ namespace ShopTARge24.Controllers
                 }).ToArrayAsync();
 
 
-            var vm = new SpaceshipDetailsViewModel();
+            var vm = new RealEstateDetailsViewModel();
 
-            vm.Id = spaceship.Id;
-            vm.Name = spaceship.Name;
-            vm.Classification = spaceship.Classification;
-            vm.BuiltDate = spaceship.BuiltDate;
-            vm.Crew = spaceship.Crew;
-            vm.EnginePower = spaceship.EnginePower;
-            vm.CreatedAt = spaceship.CreatedAt;
-            vm.ModifiedAt = spaceship.ModifiedAt;
+            vm.Id = realestate.Id;
+            vm.Area = realestate.Area;
+            vm.Location = realestate.Location;
+            vm.RoomNumber = realestate.RoomNumber;
+            vm.BuildingType = realestate.BuildingType;
+            vm.CreatedAt = realestate.CreatedAt;
+            vm.ModifiedAt = realestate.ModifiedAt;
             vm.Images.AddRange(images);
 
             return View(vm);
@@ -246,9 +244,9 @@ namespace ShopTARge24.Controllers
             var image = await _fileServices.RemoveImageFromApi(dto);
 
             //kui on null, siis vii Index vaatesse
-            if(image == null) 
-            { 
-                return RedirectToAction(nameof(Index)); 
+            if (image == null)
+            {
+                return RedirectToAction(nameof(Index));
             }
 
             return RedirectToAction(nameof(Index));
