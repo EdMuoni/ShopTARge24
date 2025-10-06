@@ -47,27 +47,26 @@ else
         <div class="form-group row">
             <label asp-for="Files" class="col-sm-2 col-form-label"></label>
             <div class="col-sm-5">
-                <div class="custom-file">
-                    <input class="form-control" asp-for="Files" multiple type="file" />
-                </div>
+                <input class="form-control" asp-for="Files" multiple type="file" />
             </div>
         </div>
 
-        @foreach (var images in Model.Images)
-        {
-            <partial name="_Images" model="images" />
-            <input asp-action="removeImage" asp-controller="realestate" asp-route-imageId="@images.ImageId" type="submit" class="btn btn-success" value="Remove Image" />
-        }
+        <div>
+            @foreach (var images in Model.Image)
+            {
+                <partial name="_Images" model="images "/>    
+            }
+        </div>
 
         @if (Model.Id.HasValue)
         {
-            <input asp-action="update" asp-controller="realestate" type="submit" class="btn btn-success" value="Update" />
+            <input asp-action="update" asp-controller="realEstate" type="submit" class="btn btn-success" value="Update" />
         }
         else
         {
-            <input asp-action="create" asp-controller="realestate" type="submit" class="btn btn-success" value="Create" />
+            <input asp-action="create" asp-controller="realEstate" type="submit" class="btn btn-success" value="Create" />
         }
 
-        <a asp-action="Index" asp-controller="realestate" class="btn btn-success">Back</a>
+        <a asp-action="Index" asp-controller="realEstate" class="btn btn-success">Back</a>
     </form>
 </div>
