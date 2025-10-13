@@ -6,11 +6,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ShopTARge24.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class FileDatabase : Migration
+    public partial class FileToDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+
             migrationBuilder.CreateTable(
                 name: "FileToDatabases",
                 columns: table => new
@@ -24,13 +25,16 @@ namespace ShopTARge24.Data.Migrations
                 {
                     table.PrimaryKey("PK_FileToDatabases", x => x.Id);
                 });
+         
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+
             migrationBuilder.DropTable(
                 name: "FileToDatabases");
+
         }
     }
 }
