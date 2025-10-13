@@ -1,0 +1,31 @@
+﻿namespace ShopTARge24
+{
+    public class accu_sample
+    {
+      [
+        {
+          "LocalObservationDateTime": "2024-06-11T14:50:00+03:00",
+          "EpochTime": 1718016600,
+          "WeatherText": "Partly sunny",
+          "WeatherIcon": 12,
+          "HasPrecipitation": true,
+          "PrecipitationType": "Rain",
+          "IsDayTime": true,
+          "Temperature": {
+            "Metric": {
+              "Value": 6.1,
+              "Unit": "C",
+              "UnitType": 17
+            },
+            "Imperial": {
+              "Value": 43,
+              "Unit": "F",
+              "UnitType": 18
+            }
+          },
+          "MobileLink": "http://m.accuweather.com/en/ee/tallinn/127964/current-weather/127964?lang=en-us",
+          "Link": "http://www.accuweather.com/en/ee/tallinn/127964/current-weather/127964?lang=en-us"
+        }
+      ]
+    }
+}
