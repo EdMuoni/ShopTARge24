@@ -55,7 +55,6 @@ namespace ShopTARge24.ApplicationServices.Services
             spaceships.EnginePower = dto.EnginePower;
             spaceships.CreatedAt = dto.CreatedAt;
             spaceships.ModifiedAt = DateTime.Now;
-            _fileServices.FilesToApi(dto, spaceships);
 
             //tuleb db-s teha andmete uuendamine jauue oleku salvestamine
             _context.Spaceships.Update(spaceships);
@@ -74,19 +73,12 @@ namespace ShopTARge24.ApplicationServices.Services
 
         public async Task<Spaceships> Delete(Guid id)
         {
+            //leida ülesse konkreetne soovitud rida, mida soovite kustutada
             var result = await _context.Spaceships
                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            var images = await _context.FileToApis
-                .Where(x => x.SpaceshipId == id)
-                .Select(y => new FileToApiDto
-                {
-                    Id = y.Id,
-                    SpaceshipId = y.SpaceshipId,
-                    ExistingFilePath = y.ExistingFilePath,
-                }).ToArrayAsync();
 
-            await _fileServices.RemoveImagesFromApi(images);
+            //kui rida on leitud, siis eemaldage andmebaasist
             _context.Spaceships.Remove(result);
             await _context.SaveChangesAsync();
 
