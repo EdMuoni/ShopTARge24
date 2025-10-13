@@ -7,7 +7,7 @@ namespace ShopTARge24.Core.Dto
 {
     public class AccuLocationRootDto
     {
-        public DateTimeOffset LocalObservationDateTime { get; set; }
+        public string? LocalObservationDateTime { get; set; }
         public long EpochTime { get; set; }
         public string? WeatherText { get; set; }
         public int WeatherIcon { get; set; }
