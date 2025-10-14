@@ -2,6 +2,6 @@
 {
     public class AcculocationWeatherResultDto
     {
-
+        public string CityName { get; set; }
     }
 }
