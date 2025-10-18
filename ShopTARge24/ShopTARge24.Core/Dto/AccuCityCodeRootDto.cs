@@ -15,31 +15,31 @@ namespace ShopTARge24.Core.Dto
         public string? LocalizedName { get; set; } = null;
         public string? EnglishName { get; set; }
         public int? PrimaryPostalCode { get; set; }
-        public AccuRegionDto? Region { get; set; }
-        public AccuCountryDto? Country { get; set; }
-        public AccuAdministrativeAreaDto? AdministrativeArea { get; set; }
-        public AccuTimezoneDto? Timezone { get; set; }
-        public AccuGeoPositionDto? GeoPosition { get; set; }
+        public Region? Region { get; set; }
+        public Country? Country { get; set; }
+        public AdministrativeArea? AdministrativeArea { get; set; }
+        public Timezone? Timezone { get; set; }
+        public GeoPosition? GeoPosition { get; set; }
         public bool IsAlias { get; set; }
-        public AccuSupplementalAdminAreasDto[]? SupplementalAdminAreas { get; set; }
-        public AccuDataSetsDto? DataSets { get; set; }
+        public SupplementalAdminAreas[]? SupplementalAdminAreas { get; set; }
+        public DataSets? DataSets { get; set; }
     }
 
-    public class AccuRegionDto
+    public class Region
     {
         public string? ID { get; set; }
         public string? LocalizedName { get; set; }
         public string? EnglishName { get; set; }
     }
 
-    public class AccuCountryDto
+    public class Country
     {
         public string? ID { get; set; }
         public string? LocalizedName { get; set; }
         public string? EnglishName { get; set; }
     }
 
-    public class AccuAdministrativeAreaDto
+    public class AdministrativeArea
     {
         public string? ID { get; set; }
         public string? LocalizedName { get; set; }
@@ -50,7 +50,7 @@ namespace ShopTARge24.Core.Dto
         public int? CountryID { get; set; }
     }
 
-    public class AccuTimezoneDto
+    public class Timezone
     {
         public string? Code { get; set; }
         public string? Name { get; set; }
@@ -59,21 +59,21 @@ namespace ShopTARge24.Core.Dto
         public string? NextOffsetChange { get; set; }
     }
 
-    public class AccuGeoPositionDto
+    public class GeoPosition
     {
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public string? Elevation { get; set; }
     }
 
-    public class AccuSupplementalAdminAreasDto
+    public class SupplementalAdminAreas
     {
         public int Level { get; set; }
         public string? LocalizedName { get; set; }
         public string? EnglishName { get; set; }
     }
 
-    public class AccuDataSetsDto
+    public class DataSets
     {
         public string[]? DataSet { get; set; }
     }
