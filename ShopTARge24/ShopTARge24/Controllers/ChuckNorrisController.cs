@@ -1,32 +1,59 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ShopTARge24.ApplicationServices.Services;
-using ShopTARge24.Core.ServiceInterface;
+using ShopTARge24.Core.ServiceInterface;               // interface from Core
+using ShopTARge24.Models.ChuckNorris;                  // ViewModel in Web
 
 namespace ShopTARge24.Controllers
 {
     public class ChuckNorrisController : Controller
     {
         private readonly IChuckNorrisServices _service;
+        public ChuckNorrisController(IChuckNorrisServices service) => _service = service;
 
-        public ChuckNorrisController(IChuckNorrisServices service)
-        {
-            _service = service;
-        }
+        public IActionResult Index() => View();
 
-        [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Joke(string? category)
         {
-            var categories = await _service.GetCategoriesAsync();
-            ViewBag.Categories = categories; // simple pass to view
-            return View();
-        }
+            var dto = await _service.GetRandomAsync(category);
 
-        // AJAX endpoint: /ChuckNorris/Random?category=dev
-        [HttpGet]
-        public async Task<IActionResult> Random(string? category)
-        {
-            var vm = await _service.GetRandomAsync(category);
-            return Json(vm);
+            var vm = new ChuckNorrisViewModel
+            {
+                Id = dto.Id,
+                IconUrl = dto.IconUrl,
+                Url = dto.Url,
+                Value = dto.Value,
+                Categories = dto.Categories
+            };
+
+            return View(vm); 
         }
     }
 }
+
+//[HttpPost]
+
+//public IActionResult SearchChuckNorrisJokes()
+//{
+//    return RedirectToAction(nameof(Joke));        
+//}
+
+//[HttpGet]
+
+//public IActionResult Joke()
+//{
+//    ChuckNorrisResultDto Dto = new ();
+
+//    _chuckNorrisServices.ChuckNorrisResult(Dto);
+//    ChuckNorrisViewModel vm = new ();
+
+//    vm.Categories = Dto.Categories;
+//    vm.CreatedAt = Dto.CreatedAt;
+//    vm.IconUrl = Dto.IconUrl;
+//    vm.Id = Dto.Id;
+//    vm.UpdatedAt = Dto.UpdatedAt;
+//    vm.Url = Dto.Url;
+//    vm.Value = Dto.Value;
+
+//    return View(vm);
+//}
+
+

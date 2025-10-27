@@ -1,0 +1,8 @@
+﻿@model ShopTARge24.Models.ChuckNorris.ChuckNorrisViewModel
+<h2>Random joke</h2>
+<p>@Model.Value</p>
+@if (!string.IsNullOrWhiteSpace(Model.Url))
+{
+    <small><a href="@Model.Url" target="_blank" rel="noopener">Source</a></small>
+    
+}

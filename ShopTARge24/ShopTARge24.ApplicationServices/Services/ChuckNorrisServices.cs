@@ -1,5 +1,5 @@
 ﻿using System.Net.Http.Json;
-using ShopTARge24.Core.Dto;
+using ShopTARge24.Core.Dto;                 // <- use DTO
 using ShopTARge24.Core.ServiceInterface;
 
 namespace ShopTARge24.ApplicationServices.Services
@@ -14,16 +14,16 @@ namespace ShopTARge24.ApplicationServices.Services
             _http.BaseAddress = new Uri("https://api.chucknorris.io/");
         }
 
-        public async Task<ChuckNorrisViewModel> GetRandomAsync(string? category = null)
+        public async Task<ChuckNorrisResultDto> GetRandomAsync(string? category = null)
         {
             var endpoint = string.IsNullOrWhiteSpace(category)
                 ? "jokes/random"
                 : $"jokes/random?category={Uri.EscapeDataString(category)}";
 
-            var json = await _http.GetFromJsonAsync<ApiJoke>(endpoint);
-            if (json == null) throw new Exception("Failed to get joke.");
+            var json = await _http.GetFromJsonAsync<ApiJoke>(endpoint)
+                       ?? throw new Exception("Failed to get joke.");
 
-            return new ChuckNorrisViewModel
+            return new ChuckNorrisResultDto
             {
                 Id = json.id,
                 IconUrl = json.icon_url,
@@ -34,12 +34,8 @@ namespace ShopTARge24.ApplicationServices.Services
         }
 
         public async Task<List<string>> GetCategoriesAsync()
-        {
-            var cats = await _http.GetFromJsonAsync<List<string>>("jokes/categories");
-            return cats ?? new List<string>();
-        }
+            => await _http.GetFromJsonAsync<List<string>>("jokes/categories") ?? new List<string>();
 
-        // Minimal DTO for API shape
         private class ApiJoke
         {
             public string id { get; set; } = "";

@@ -1,13 +1,12 @@
-﻿@model ShopTARge24.Models.ChuckNorris.ChuckNorrisRandomeViewModel
-
-<h1>Search a Joke</h1>
-
-<div class="container">
-    <form method="post">
-        <div class="container">
-            <div class="form-group col-md-offset-3 col-md-5">
-                <button asp-controller="ChuckNorris" asp-action="Randome" class="btn btn-primary">Search</button>
-            </div>
-        </div>
-    </form>
-</div>
+﻿
+<p>
+    <a class="btn btn-primary" href="@Url.Action("Joke", "ChuckNorris")">
+        Get a random joke (in app)
+    </a>
+    &nbsp;or&nbsp;
+    <a class="btn btn-outline-secondary"
+       href="https://api.chucknorris.io/jokes/random"
+       target="_blank" rel="noopener">
+        open API directly
+    </a>
+</p>

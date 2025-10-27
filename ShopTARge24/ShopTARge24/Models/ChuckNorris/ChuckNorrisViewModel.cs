@@ -7,5 +7,7 @@
         public string? Url { get; set; }
         public string? Value { get; set; }
         public List<string> Categories { get; set; } = new();
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 }

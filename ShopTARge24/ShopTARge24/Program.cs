@@ -3,6 +3,9 @@ using Microsoft.Extensions.FileProviders;
 using ShopTARge24.ApplicationServices.Services;
 using ShopTARge24.Core.ServiceInterface;
 using ShopTARge24.Data;
+using ShopTARge24.Core.ServiceInterface;
+
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +17,8 @@ builder.Services.AddScoped<ISpaceshipServices, SpaceshipServices>();
 builder.Services.AddScoped<IFileServices, FileServices>();
 builder.Services.AddScoped<IRealEstateServices, RealEstateServices>();
 builder.Services.AddScoped<IWeatherForecastServices, WeatherForecastServices>();
+builder.Services.AddControllersWithViews();
+builder.Services.AddHttpClient<IChuckNorrisServices, ChuckNorrisServices>();
 
 
 builder.Services.AddDbContext<ShopTARge24Context>(options =>
