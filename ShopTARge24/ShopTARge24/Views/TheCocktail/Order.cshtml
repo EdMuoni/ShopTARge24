@@ -1,0 +1,28 @@
+﻿@model ShopTARge24.Core.Dto.TheCocktailDto
+
+<div class="card">
+    <img src="@Model.StrDrinkThumb" alt="@Model.StrDrink" class="card-img-top" style="max-width:300px" />
+
+    <div class="card-body">
+        <h2 class="card-title">@Model.StrDrink</h2>
+        <p><strong>Glass:</strong> @Model.StrGlass</p>
+        <p><strong>Category:</strong> @Model.StrCategory</p>
+        <p><strong>Instructions:</strong> @Model.StrInstructions</p>
+    </div>
+
+    <div class="card-footer">
+        <h4>Ingredients:</h4>
+        <ul>
+            @for (int i = 1; i <= 15; i++)
+            {
+                var ing = typeof(ShopTARge24.Core.Dto.TheCocktailDto).GetProperty($"StrIngredient{i}")?.GetValue(Model) as string;
+                var mea = typeof(ShopTARge24.Core.Dto.TheCocktailDto).GetProperty($"StrMeasure{i}")?.GetValue(Model) as string;
+
+                if (!string.IsNullOrWhiteSpace(ing))
+                {
+                    <li>@(mea ?? "") @ing</li>
+                }
+            }
+        </ul>
+    </div>
+</div>
