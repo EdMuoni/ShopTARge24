@@ -23,6 +23,7 @@ namespace ShopTARge24.RealEstateTest
         public virtual void SetupServices(IServiceCollection services)
         {
             services.AddScoped<IRealEstateServices, RealEstateServices>();
+            services.AddScoped<IFileServices, FileServices>();
 
             services.AddDbContext<ShopTARge24Context>(x =>
             {
@@ -36,6 +37,12 @@ namespace ShopTARge24.RealEstateTest
         public void Dispose()
         {
 
+        }
+
+        protected T Svc<T>()
+        {
+            // Resolve the service from the service provider
+            return serviceProvider.GetService<T>();
         }
 
         private void RegisterMacros(IServiceCollection services)
