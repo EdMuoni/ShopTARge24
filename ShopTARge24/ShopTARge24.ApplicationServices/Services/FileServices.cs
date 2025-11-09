@@ -77,7 +77,7 @@ namespace ShopTARge24.ApplicationServices.Services
                         {
                             Id = Guid.NewGuid(),
                             ExistingFilePath = uniqueFileName,
-                            SpaceshipId = domain.Id
+                            KindergartenId = domain.Id
                         };
 
                         _context.FileToApis.AddAsync(path);

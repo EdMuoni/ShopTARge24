@@ -54,10 +54,10 @@
         </div>
     </dl>
 
-    @foreach (var images in Model.Images)
-    {
-        <partial name="_Images" model="images" />
-    }
+        @foreach (var images in Model.Images)
+        {
+            <partial name="_Images" model="images" />
+        }
 
     <hr />
     <a asp-action="Index" asp-controller="kindergartens" class="btn btn-danger">Back</a>

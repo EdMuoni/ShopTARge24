@@ -44,9 +44,10 @@ namespace ShopTARge24.ApplicationServices.Services
         public async Task<Kindergartens> Update(KindergartenDto dto)
         {
             //vaja leida doamini objekt, mida saaks mappida dto-ga
-            Kindergartens kindergartens = new Kindergartens();
+            var kindergartens = await _context.Kindergartens.FirstOrDefaultAsync(x => x.Id == dto.Id);
+            if (kindergartens == null) return null;
 
-            kindergartens.Id = Guid.NewGuid();
+            //kindergartens.Id = Guid.NewGuid();
             kindergartens.GroupName = dto.GroupName;
             kindergartens.ChildrenCount = dto.ChildrenCount;
             kindergartens.KindergartenName = dto.KindergartenName;

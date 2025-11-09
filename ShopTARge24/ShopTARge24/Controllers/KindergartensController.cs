@@ -9,13 +9,13 @@ using ShopTARge24.Models.Kindergartens;
 
 namespace ShopTARge24.Controllers
 {
-    public class KindergartenController : Controller
+    public class KindergartensController : Controller
     {
         private readonly ShopTARge24Context _context;
         private readonly IKindergartenServices _kindergartenServices;
         private readonly IFileServices _fileServices;
 
-        public KindergartenController
+        public KindergartensController
             (
                 ShopTARge24Context context,
                 IKindergartenServices kindergartenServices,
