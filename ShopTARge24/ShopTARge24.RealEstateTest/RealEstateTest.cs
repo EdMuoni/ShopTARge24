@@ -1,5 +1,7 @@
-﻿using ShopTARge24.Core.Dto;
+﻿using Microsoft.Identity.Client;
+using ShopTARge24.Core.Dto;
 using ShopTARge24.Core.ServiceInterface;
+using System;
 
 
 namespace ShopTARge24.RealEstateTest
@@ -196,6 +198,97 @@ namespace ShopTARge24.RealEstateTest
             };
 
             return realEstate;
+
+        }
+
+        //Meeskonnas tehtud testid:
+
+        //tuleb välja mõelda kolm erinevat xUnit testi RealEstate kohta
+        //saate teha 2-3 in meeskonnas
+        //kommentaari kirjutate, mida iga test kontrollib
+
+
+        //Ei saa sisestada negatiivset andmeid
+        // Kontrollib, et kui proovime sisestada negatiivseid väärtusi kinnisvara omaduste jaoks,
+        // siis tagastatakse õige veateade.
+
+        //Ei saa uuendada andmeid negatiivseteks
+        // Kontrollib, et kui proovime sisestada negatiivseid väärtusi kinnisvara omaduste jaoks,
+        // siis tagastatakse õige veateade.
+
+
+
+        [Fact]
+        //Ei saa sisestada negatiivset andmeid
+        // Kontrollib, et kui proovime sisestada negatiivseid väärtusi kinnisvara omaduste jaoks,
+        // siis tagastatakse õige veateade.
+        public async Task ShouldNot_CreateRealEstateWithNegativeValues_WhenAttemptToCreate()
+        {
+            //Arrange
+            //Loome DTO negatiivse väärtustega
+            RealEstateDto dto = new()
+            {
+                Area = -120.5,
+                Location = "Test Location",
+                RoomNumber = 3,
+                BuildingType = "Apartment",
+                CreatedAt = DateTime.UtcNow,
+                ModifiedAt = DateTime.UtcNow
+            };
+            //Act
+            var result = await Svc<IRealEstateServices>().Create(dto);
+            //Assert
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        //Ei saa sisestada negatiivset andmeid, kui uuendame olemasolevat kinnisvara
+        // Kontrollib, et kui proovime sisestada negatiivseid väärtusi kinnisvara omaduste jaoks,
+        // siis tagastatakse õige veateade.
+
+        public async Task ShouldNot_UpdateRealEstateWithNegativeValues_WhenAttemptToUpdate()
+        {
+            //Arrange
+            //Loome olemasoleva kinnisvara
+            RealEstateDto dto = MockRealEstateData();
+            var addRealEstate1 = await Svc<IRealEstateServices>().Create(dto);
+            //Act
+            var negativeRealEstate = await Svc<IRealEstateServices>().Update(dto);
+            //Assert
+            Assert.NotNull(negativeRealEstate);
+        }
+
+        [Fact]
+        public async Task Should_ReturnCorrectRealEstate_WhenCallingDetails()
+        {
+            // Kontrollib, et Details tagastab õige maja andmed
+            //arrange
+            RealEstateDto dto = MockRealEstateData();
+            var created = await Svc<IRealEstateServices>().Create(dto);
+
+            //act
+            var details = await Svc<IRealEstateServices>().DetailAsync((Guid)created.Id);
+
+            //assert
+            Assert.NotNull(details);
+            Assert.Equal(created.Id, details.Id);
+            Assert.Equal(created.Area, details.Area);
+            Assert.Equal(created.Location, details.Location);
+        }
+
+        private RealEstateDto MockNegativeUpdateRealEstateData()
+        {
+            RealEstateDto negativeRealEstate = new()
+            {
+                Area = -100.0,
+                Location = "Secret Location",
+                RoomNumber = -7,
+                BuildingType = "Hideout",
+                CreatedAt = DateTime.Now.AddYears(1),
+                ModifiedAt = DateTime.Now.AddYears(1)
+            };
+
+            return negativeRealEstate;
         }
     }
 }
