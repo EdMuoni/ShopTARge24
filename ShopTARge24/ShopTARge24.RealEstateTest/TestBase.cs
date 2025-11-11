@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using ShopTARge24.RealEstateTest.Macros;
-using ShopTARge24.Core.ServiceInterface;
+﻿using Microsoft.Extensions.DependencyInjection;
 using ShopTARge24.ApplicationServices.Services;
+using ShopTARge24.Core.ServiceInterface;
 using ShopTARge24.Data;
+using ShopTARge24.RealEstateTest.Macros;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
+using ShopTARge24.RealEstateTest.Mock;
 
 
 namespace ShopTARge24.RealEstateTest
@@ -12,6 +14,8 @@ namespace ShopTARge24.RealEstateTest
     public abstract class TestBase
     {
         protected IServiceProvider serviceProvider { get; set; }
+
+
         protected TestBase()
         {
             var services = new ServiceCollection();
@@ -24,6 +28,7 @@ namespace ShopTARge24.RealEstateTest
         {
             services.AddScoped<IRealEstateServices, RealEstateServices>();
             services.AddScoped<IFileServices, FileServices>();
+            services.AddScoped<IHostEnvironment, MockIHostEnvironment>();
 
             services.AddDbContext<ShopTARge24Context>(x =>
             {
@@ -41,21 +46,23 @@ namespace ShopTARge24.RealEstateTest
 
         protected T Svc<T>()
         {
-            // Resolve the service from the service provider
+            // Resolve service from the service provider
             return serviceProvider.GetService<T>();
         }
 
         private void RegisterMacros(IServiceCollection services)
         {
-            var macrobaseType = typeof(IMacros);
+            var macroBaseType = typeof(IMacros);
 
-            var macro = macrobaseType.Assembly.GetTypes()
-                .Where(t => macrobaseType.IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract);
+            var macros = macroBaseType.Assembly.GetTypes()
+                .Where(t => macroBaseType.IsAssignableFrom(t)
+                && !t.IsInterface && !t.IsAbstract);
 
-            foreach (var type in macro)
+            foreach (var macro in macros)
             {
                 services.AddSingleton(macro);
             }
         }
+
     }
 }
