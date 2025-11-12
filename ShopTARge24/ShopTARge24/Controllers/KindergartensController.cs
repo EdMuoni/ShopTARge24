@@ -197,33 +197,52 @@ namespace ShopTARge24.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(Guid id)
         {
-            //kasutada service classi meetodit, et info k'tte saada
             var kindergarten = await _kindergartenServices.DetailAsync(id);
 
             if (kindergarten == null)
-            {
                 return NotFound();
-            }
 
-            var images = await _context.FileToApis
+            // Get images from file system
+            var fileSystemImages = await _context.FileToApis
                 .Where(x => x.KindergartenId == id)
                 .Select(y => new ImageViewModel
                 {
+                    ImageId = y.Id,
                     Filepath = y.ExistingFilePath,
-                    ImageId = y.Id
+                    KindergartenId = y.KindergartenId
                 }).ToArrayAsync();
 
+            // Get images from database
+            var databaseImages = await _context.FileToDatabases
+                .Where(x => x.KindergartenId == id)
+                .Select(y => new ImageViewModel
+                {
+                    ImageId = y.Id,
+                    Filepath = $"data:image/jpeg;base64,{Convert.ToBase64String(y.ImageData)}",
+                    KindergartenId = y.KindergartenId
+                }).ToArrayAsync();
 
-            var vm = new KindergartenDetailsViewModel();
+            var vm = new KindergartenDetailsViewModel
+            {
+                Id = kindergarten.Id,
+                GroupName = kindergarten.GroupName,
+                ChildrenCount = kindergarten.ChildrenCount,
+                KindergartenName = kindergarten.KindergartenName,
+                TeacherName = kindergarten.TeacherName,
+                CreatedAt = kindergarten.CreatedAt,
+                UpdatedAt = kindergarten.UpdatedAt
+            };
 
-            vm.Id = kindergarten.Id;
-            vm.GroupName = kindergarten.GroupName;
-            vm.ChildrenCount = kindergarten.ChildrenCount;
-            vm.KindergartenName = kindergarten.KindergartenName;
-            vm.TeacherName = kindergarten.TeacherName;
-            vm.CreatedAt = kindergarten.CreatedAt;
-            vm.UpdatedAt = kindergarten.UpdatedAt;
-            vm.Images.AddRange(images);
+            // Combine both image sources
+            vm.Images.AddRange(fileSystemImages);
+            vm.Images.AddRange(databaseImages);
+
+            return View(vm);
+        }
+
+        // Combine both image sources
+        vm.Images.AddRange(fileSystemImages);
+            vm.Images.AddRange(databaseImages);
 
             return View(vm);
         }
