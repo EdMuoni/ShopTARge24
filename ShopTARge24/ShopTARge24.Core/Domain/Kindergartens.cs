@@ -10,5 +10,9 @@ namespace ShopTARge24.Core.Domain
         public string? TeacherName { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+
+        // Navigation properties for BOTH storage types
+        //public ICollection<FileToApi> FileToApis { get; set; }
+        //public ICollection<FileToDatabase> FileToDatabases { get; set; }
     }
 }
