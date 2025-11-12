@@ -212,16 +212,6 @@ namespace ShopTARge24.Controllers
                     KindergartenId = y.KindergartenId
                 }).ToArrayAsync();
 
-            // Get images from database
-            var databaseImages = await _context.FileToDatabases
-                .Where(x => x.KindergartenId == id)
-                .Select(y => new ImageViewModel
-                {
-                    ImageId = y.Id,
-                    Filepath = $"data:image/jpeg;base64,{Convert.ToBase64String(y.ImageData)}",
-                    KindergartenId = y.KindergartenId
-                }).ToArrayAsync();
-
             var vm = new KindergartenDetailsViewModel
             {
                 Id = kindergarten.Id,
@@ -235,32 +225,84 @@ namespace ShopTARge24.Controllers
 
             // Combine both image sources
             vm.Images.AddRange(fileSystemImages);
-            vm.Images.AddRange(databaseImages);
 
             return View(vm);
         }
 
-        // Combine both image sources
-        vm.Images.AddRange(fileSystemImages);
-            vm.Images.AddRange(databaseImages);
 
-            return View(vm);
-        }
+        //    public async Task<IActionResult> RemoveImage(ImageViewModel vm)
+        //    {
+        //        try
+        //{
+        //    // Validate ImageId
+        //    if (vm.ImageId == Guid.Empty)
+        //    {
+        //        return RedirectToAction(nameof(Index));
+        //    }
+
+        //    // Remove from FileToApi
+        //    var apidto = new FileToApiDto
+        //    {
+        //        Id = vm.ImageId
+        //    };
+
+        //    var imageFromApi = await _fileServices.RemoveImageFromApi(apidto);
+
+        //    if (imageFromApi == null)
+        //    {
+        //        return RedirectToAction(nameof(Index));
+        //    }
+
+        //    // Remove from FileToDatabase
+        //    var dbDto = new FileToDatabaseDto
+        //    {
+        //        Id = vm.ImageId
+        //    };
+
+        //    var imageFromDb = await _fileServices.RemoveImageFromDatabase(dbDto);
+
+        //    if (imageFromDb == null)
+        //    {
+        //        return RedirectToAction(nameof(Index));
+        //    }
+
+        //    return RedirectToAction(nameof(Index));
+        //}
+        //catch (Exception ex)
+        //{
+        //    return RedirectToAction(nameof(Index));
+        //}
+        //    }
+        //}
 
         public async Task<IActionResult> RemoveImage(ImageViewModel vm)
         {
             //tuleb ühendada dto ja vm
             //Id peab saama edastatud andmebaasi
-            var dto = new FileToApiDto()
+            var apidto = new FileToApiDto()
             {
                 Id = vm.ImageId
             };
 
             //kutsu välja vastav serviceclassi meetod
-            var image = await _fileServices.RemoveImageFromApi(dto);
+            var imageFromApi = await _fileServices.RemoveImageFromApi(apidto);
 
             //kui on null, siis vii Index vaatesse
-            if (image == null)
+            if (imageFromApi == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Use FileToDatabaseDto for RemoveImageFromDatabase
+            var dbDto = new FileToDatabaseDto()
+            {
+                Id = vm.ImageId
+            };
+
+            var imageFromDb = await _fileServices.RemoveImageFromDatabase(dbDto);
+
+            //kui on null, siis vii Index vaatesse
+            if (imageFromDb == null)
             {
                 return RedirectToAction(nameof(Index));
             }

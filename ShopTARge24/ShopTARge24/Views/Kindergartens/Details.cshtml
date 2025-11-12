@@ -54,10 +54,15 @@
         </div>
     </dl>
 
+    @foreach (var image in Model.Images)
+    {
+        <img src="@Url.Content($"~/{image.Filepath}")" alt="Image" />
+    }
+@* 
         @foreach (var images in Model.Images)
         {
             <partial name="_Images" model="images" />
-        }
+        } *@
 
     <hr />
     <a asp-action="Index" asp-controller="kindergartens" class="btn btn-danger">Back</a>

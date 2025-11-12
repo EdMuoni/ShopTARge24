@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using ShopTARge24.Core.Domain;
 using ShopTARge24.Core.Dto;
 using ShopTARge24.Core.ServiceInterface;
@@ -81,7 +82,7 @@ namespace ShopTARge24.ApplicationServices.Services
             FileToApi path = new FileToApi
             {
                 Id = Guid.NewGuid(),
-                ExistingFilePath = uniqueFileName,
+                ExistingFilePath = $"multipleFileUpload/{uniqueFileName}", // Updated to store relative path
                 SpaceshipId = spaceshipId,
                 KindergartenId = kindergartenId
             };
@@ -117,7 +118,7 @@ namespace ShopTARge24.ApplicationServices.Services
             }
 
             return null;
-        }
+        }  
 
         public async Task<bool> RemoveImagesFromApi(FileToApiDto[] dtos)
         {
@@ -238,6 +239,38 @@ namespace ShopTARge24.ApplicationServices.Services
                 // Log exception
                 return false;
             }
+        }
+
+        public async Task<FileToDatabaseDto> RemoveImageFromDatabase(FileToDatabaseDto dto)
+        {
+            try
+            {
+                var fileToDatabase = await _context.FileToDatabases
+                    .FirstOrDefaultAsync(x => x.Id == dto.Id);
+
+                if (fileToDatabase == null)
+                {
+                    return null;
+                }
+
+                _context.FileToDatabases.Remove(fileToDatabase);
+                await _context.SaveChangesAsync();
+
+                return dto;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public async Task<bool> RemoveImagesFromDatabase(FileToDatabaseDto[] dtos)
+        {
+            foreach (var dto in dtos)
+            {
+                await RemoveImageFromDatabase(dto);
+            }
+            return true;
         }
     }
 }
