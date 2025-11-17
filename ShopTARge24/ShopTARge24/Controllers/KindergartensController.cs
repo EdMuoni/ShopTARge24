@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ShopTARge24.ApplicationServices.Services;
 using ShopTARge24.Core.Domain;
 using ShopTARge24.Core.Dto;
 using ShopTARge24.Core.ServiceInterface;
 using ShopTARge24.Data;
 using ShopTARge24.Models.Kindergartens;
+
 
 
 namespace ShopTARge24.Controllers
@@ -65,11 +67,12 @@ namespace ShopTARge24.Controllers
                 CreatedAt = vm.CreatedAt,
                 UpdatedAt = vm.UpdatedAt,
                 Files = vm.Files,
-                FileToApiDtos = vm.Image
-                    .Select(x => new FileToApiDto
+                Image = vm.Image
+                    .Select(x => new FileToDatabaseDto
                     {
-                        Id = x.ImageId,
-                        ExistingFilePath = x.Filepath,
+                        Id = x.Id,
+                        ImageData = x.ImageData,
+                        ImageTitle = x.ImageTitle,
                         KindergartenId = x.KindergartenId
                     }).ToArray()
             };
@@ -94,13 +97,15 @@ namespace ShopTARge24.Controllers
                 return NotFound();
             }
 
-            var images = await _context.FileToApis
+            var images = await _context.FileToDatabases
                 .Where(x => x.KindergartenId == id)
                 .Select(y => new ImageViewModel
                 {
-                    Filepath = y.ExistingFilePath,
-                    ImageId = y.Id
+                    Filepath = y.ImageTitle,
+                    Id = y.Id
                 }).ToArrayAsync();
+
+            //ImageViewModel[] images = await FileFromDatabase(id);
 
             var vm = new KindergartenCreateUpdateViewModel();
 
@@ -129,11 +134,11 @@ namespace ShopTARge24.Controllers
                 CreatedAt = vm.CreatedAt,
                 UpdatedAt = vm.UpdatedAt,
                 Files = vm.Files,
-                FileToApiDtos = vm.Image
-                    .Select(x => new FileToApiDto
+                Image = vm.Image
+                    .Select(x => new FileToDatabaseDto
                     {
-                        Id = x.ImageId,
-                        ExistingFilePath = x.Filepath,
+                        Id = x.Id,
+                        ImageTitle = x.ImageTitle,
                         KindergartenId = x.KindergartenId
                     }).ToArray()
             };
@@ -146,7 +151,9 @@ namespace ShopTARge24.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+
         }
+
 
         [HttpGet]
         public async Task<IActionResult> Delete(Guid id)
@@ -158,13 +165,18 @@ namespace ShopTARge24.Controllers
                 return NotFound();
             }
 
-            var images = await _context.FileToApis
-                .Where(x => x.KindergartenId == id)
-                .Select(y => new ImageViewModel
-                {
-                    Filepath = y.ExistingFilePath,
-                    ImageId = y.Id
-                }).ToArrayAsync();
+
+            //KindergartenImageViewModel[] images = await FileFromDatabase(id);
+
+            //var images = await _context.FileToApis
+            //    .Where(x => x.KindergartenId == id)
+            //    .Select(y => new ImageViewModel
+            //    {
+            //        Filepath = y.ExistingFilePath,
+            //        Id = y.Id
+            //    }).ToArrayAsync();
+
+            ImageViewModel[] images = await FileFromDatabase(id);
 
             var vm = new KindergartenDeleteViewModel();
 
@@ -175,7 +187,7 @@ namespace ShopTARge24.Controllers
             vm.TeacherName = kindergarten.TeacherName;
             vm.CreatedAt = kindergarten.CreatedAt;
             vm.UpdatedAt = kindergarten.UpdatedAt;
-            vm.ImageViewModels.AddRange(images);
+            vm.Image.AddRange(images);
 
             return View(vm);
         }
@@ -200,115 +212,70 @@ namespace ShopTARge24.Controllers
             var kindergarten = await _kindergartenServices.DetailAsync(id);
 
             if (kindergarten == null)
+            {
                 return NotFound();
+            }
+            //// Get images from file system
+            //var fileSystemImages = await _context.FileToApis
+            //    .Where(x => x.KindergartenId == id)
+            //    .Select(y => new ImageViewModel
+            //    {
+            //        Id = y.Id,
+            //        Filepath = y.ExistingFilePath,
+            //        KindergartenId = y.KindergartenId
+            //    }).ToArrayAsync();
 
-            // Get images from file system
-            var fileSystemImages = await _context.FileToApis
+            ImageViewModel[] images = await FileFromDatabase(id);
+
+            var vm = new KindergartenDetailsViewModel();
+
+            vm.Id = kindergarten.Id;
+            vm.GroupName = kindergarten.GroupName;
+            vm.ChildrenCount = kindergarten.ChildrenCount;
+            vm.KindergartenName = kindergarten.KindergartenName;
+            vm.TeacherName = kindergarten.TeacherName;
+            vm.CreatedAt = kindergarten.CreatedAt;
+            vm.UpdatedAt = kindergarten.UpdatedAt;
+            vm.Images.AddRange(images);
+
+            return View(vm);
+
+        }
+
+        private async Task<ImageViewModel[]> FileFromDatabase(Guid id)
+        {
+            return await _context.FileToDatabases
                 .Where(x => x.KindergartenId == id)
                 .Select(y => new ImageViewModel
                 {
-                    ImageId = y.Id,
-                    Filepath = y.ExistingFilePath,
-                    KindergartenId = y.KindergartenId
+                    Id = y.Id,
+                    KindergartenId = y.Id,
+                    ImageData = y.ImageData,
+                    ImageTitle = y.ImageTitle,
+                    Image = string.Format("data:image/gif;base64,{0}", Convert.ToBase64String(y.ImageData))
                 }).ToArrayAsync();
-
-            var vm = new KindergartenDetailsViewModel
-            {
-                Id = kindergarten.Id,
-                GroupName = kindergarten.GroupName,
-                ChildrenCount = kindergarten.ChildrenCount,
-                KindergartenName = kindergarten.KindergartenName,
-                TeacherName = kindergarten.TeacherName,
-                CreatedAt = kindergarten.CreatedAt,
-                UpdatedAt = kindergarten.UpdatedAt
-            };
-
-            // Combine both image sources
-            vm.Images.AddRange(fileSystemImages);
-
-            return View(vm);
         }
-
-
-        //    public async Task<IActionResult> RemoveImage(ImageViewModel vm)
-        //    {
-        //        try
-        //{
-        //    // Validate ImageId
-        //    if (vm.ImageId == Guid.Empty)
-        //    {
-        //        return RedirectToAction(nameof(Index));
-        //    }
-
-        //    // Remove from FileToApi
-        //    var apidto = new FileToApiDto
-        //    {
-        //        Id = vm.ImageId
-        //    };
-
-        //    var imageFromApi = await _fileServices.RemoveImageFromApi(apidto);
-
-        //    if (imageFromApi == null)
-        //    {
-        //        return RedirectToAction(nameof(Index));
-        //    }
-
-        //    // Remove from FileToDatabase
-        //    var dbDto = new FileToDatabaseDto
-        //    {
-        //        Id = vm.ImageId
-        //    };
-
-        //    var imageFromDb = await _fileServices.RemoveImageFromDatabase(dbDto);
-
-        //    if (imageFromDb == null)
-        //    {
-        //        return RedirectToAction(nameof(Index));
-        //    }
-
-        //    return RedirectToAction(nameof(Index));
-        //}
-        //catch (Exception ex)
-        //{
-        //    return RedirectToAction(nameof(Index));
-        //}
-        //    }
-        //}
 
         public async Task<IActionResult> RemoveImage(ImageViewModel vm)
         {
             //tuleb ühendada dto ja vm
             //Id peab saama edastatud andmebaasi
-            var apidto = new FileToApiDto()
+            var dto = new FileToDatabase()
             {
-                Id = vm.ImageId
+                Id = vm.Id
             };
 
             //kutsu välja vastav serviceclassi meetod
-            var imageFromApi = await _fileServices.RemoveImageFromApi(apidto);
+            var image = await _fileServices.RemoveImageFromDatabase(dto);
 
             //kui on null, siis vii Index vaatesse
-            if (imageFromApi == null)
-            {
-                return RedirectToAction(nameof(Index));
-            }
-
-            // Use FileToDatabaseDto for RemoveImageFromDatabase
-            var dbDto = new FileToDatabaseDto()
-            {
-                Id = vm.ImageId
-            };
-
-            var imageFromDb = await _fileServices.RemoveImageFromDatabase(dbDto);
-
-            //kui on null, siis vii Index vaatesse
-            if (imageFromDb == null)
+            if (image == null)
             {
                 return RedirectToAction(nameof(Index));
             }
 
             return RedirectToAction(nameof(Index));
         }
+
     }
 }
-

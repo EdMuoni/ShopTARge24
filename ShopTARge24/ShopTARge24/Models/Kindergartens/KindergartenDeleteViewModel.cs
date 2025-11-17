@@ -8,7 +8,7 @@
         public string? KindergartenName { get; set; }
         public string? TeacherName { get; set; }
 
-        public List<ImageViewModel> ImageViewModels { get; set; }
+        public List<ImageViewModel> Image { get; set; }
             = new List<ImageViewModel>();
 
         public DateTime? CreatedAt { get; set; }

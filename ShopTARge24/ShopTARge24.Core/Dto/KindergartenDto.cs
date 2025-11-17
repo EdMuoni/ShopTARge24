@@ -10,13 +10,15 @@ namespace ShopTARge24.Core.Dto
         public string? KindergartenName { get; set; }
         public string? TeacherName { get; set; }
         
-        public List<IFormFile> Files { get; set; }
+        public List<IFormFile>? Files { get; set; }
 
-        public IEnumerable<FileToApiDto> FileToApiDtos { get; set; }
-            = new List<FileToApiDto>();
+        //public IEnumerable<FileToApiDto> FileToApiDtos { get; set; }
+        //    = new List<FileToApiDto>();
+        //public IEnumerable<FileToDatabaseDto> FileToDatabaseDto { get; set; }
+        //    = new List<FileToDatabaseDto>();
 
         // ADD: For database blob storage
-        public IEnumerable<FileToDatabaseDto> FileToDatabaseDtos { get; set; }
+        public IEnumerable<FileToDatabaseDto> Image { get; set; }
             = new List<FileToDatabaseDto>();
 
         public DateTime? CreatedAt { get; set; }
