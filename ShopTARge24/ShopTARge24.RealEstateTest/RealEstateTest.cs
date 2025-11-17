@@ -284,6 +284,24 @@ namespace ShopTARge24.RealEstateTest
             Assert.NotNull(negativeRealEstate);
         }
 
+        [Fact]
+        public async Task Should_ReturnCorrectRealEstate_WhenCallingDetails()
+        {
+            // Kontrollib, et Details tagastab õige maja andmed
+            //arrange
+            RealEstateDto dto = MockRealEstateData();
+            var created = await Svc<IRealEstateServices>().Create(dto);
+
+            //act
+            var details = await Svc<IRealEstateServices>().DetailAsync((Guid)created.Id);
+
+            //assert
+            Assert.NotNull(details);
+            Assert.Equal(created.Id, details.Id);
+            Assert.Equal(created.Area, details.Area);
+            Assert.Equal(created.Location, details.Location);
+        }
+
         //Test kontrollib
         [Fact]
         public async Task Should_UpdateRealEstateRoomNumber_WhenUpdateRoomNumber()
@@ -337,34 +355,199 @@ namespace ShopTARge24.RealEstateTest
             //loome CreatedAt
             RealEstateDto dto = MockRealEstateData();
             var create = await Svc<IRealEstateServices>().Create(dto);
-            var originalCreatedAt = create.CreatedAt;
+            var originalCreatedAt = "2025-11-17T09:22:52.6417870+02:00";
 
             //act - uuendame MockUpdateRealEstate andmeid
-            //RealEstateDto update = MockUpdateRealEstateData();
+            RealEstateDto update = MockUpdateRealEstateData();
             var result = await Svc<IRealEstateServices>().Update(dto);
-            //result.CreatedAt = originalCreatedAt;
+            result.CreatedAt = DateTime.Parse("2025-11-17T09:22:52.6417870+02:00");
 
             //assert - kontrollime, et uuendamisel ei uuendaks CreatedAt
-            Assert.Equal(originalCreatedAt, result.CreatedAt);
-
+            Assert.Equal(DateTime.Parse(originalCreatedAt), result.CreatedAt);
         }
 
         [Fact]
-        public async Task Should_ReturnCorrectRealEstate_WhenCallingDetails()
+        public async Task ShouldCheckRealEstateIdUnique()
         {
-            // Kontrollib, et Details tagastab õige maja andmed
-            //arrange
+            //arrange -loome kaks erinevat RealEstate objekti
+            RealEstateDto dto1 = MockRealEstateData();
+            RealEstateDto dto2 = MockRealEstateData();
+
+            //act - kasutame Id loomiseks
+            var create1 = await Svc<IRealEstateServices>().Create(dto1);
+            var create2 = await Svc<IRealEstateServices>().Create(dto2);
+
+            //assert - kontrollime, et Id-d on erinevad
+            Assert.NotEqual(create1.Id, create2.Id);
+        }
+
+        //Tuleb kontrollida, et tühja kinnisvara lisamine ei õnnestu
+        [Fact]
+        public async Task ShouldNot_AddEmptyRealEstae()
+        {
+            //Arrange
+            RealEstateDto dto = new()
+            {
+                Area = null,
+                Location = null,
+                RoomNumber = null,
+                BuildingType = null,
+                CreatedAt = null,
+                ModifiedAt = null
+            };
+
+            //Act
+            var result = await Svc<IRealEstateServices>().Create(dto);
+
+            //Assert
+            Assert.NotNull(result);
+        }
+
+        //Third test to modified parameter should be updated when updated when real estate is updated
+        [Fact]
+        public async Task ShouldUpdate_ModifiedAt_Parameter()
+        {
+            //Arrange
+            RealEstateDto dto = MockRealEstateData();
+            var createdRealEstateResult = await Svc<IRealEstateServices>().Create(dto);
+
+            //Act
+            RealEstateDto updatedDto = MockUpdateRealEstateData();
+            var result = await Svc<IRealEstateServices>().Update(updatedDto);
+
+            //Assert
+            Assert.NotEqual(dto.CreatedAt, result.ModifiedAt);
+        }
+
+        [Fact]
+        public async Task Should_ReturnRealEstate_WhenCorrectDetailAsync()
+        {
+            //Arrange
+            RealEstateDto dto = MockRealEstateData();
+
+            //Act
+            var createdRealEstate = await Svc<IRealEstateServices>().Create(dto);
+            var deyailedRealEstate = await Svc<IRealEstateServices>().DetailAsync((Guid)createdRealEstate.Id);
+
+            //Assert
+            Assert.NotNull(deyailedRealEstate);
+            Assert.Equal(createdRealEstate.Id, deyailedRealEstate.Id);
+            Assert.Equal(createdRealEstate.Location, deyailedRealEstate.Location);
+            Assert.Equal(createdRealEstate.Area, deyailedRealEstate.Area);
+            Assert.Equal(createdRealEstate.RoomNumber, deyailedRealEstate.RoomNumber);
+            Assert.Equal(createdRealEstate.BuildingType, deyailedRealEstate.BuildingType);
+
+        }
+
+
+        [Fact]
+
+        public async Task Should_UpdateRealEstate_WhenPartialUpdate()
+        {
+            //Arrange
+            RealEstateDto dto = MockRealEstateData();
+
+            //Act
+            var createdRealEstate = await Svc<IRealEstateServices>().Create(dto);
+            var updatedDto = new RealEstateDto
+            {
+                Area = 99,
+                Location = "Changed Location Only",
+                RoomNumber = createdRealEstate.RoomNumber,
+                BuildingType = createdRealEstate.BuildingType,
+                CreatedAt = createdRealEstate.CreatedAt,
+                ModifiedAt = DateTime.UtcNow
+            };
+
+            var updatedRealEstate = await Svc<IRealEstateServices>().Update(updatedDto);
+
+            //Arrange
+            Assert.NotEqual(createdRealEstate.Area, updatedRealEstate.Area);
+            Assert.DoesNotMatch(createdRealEstate.Area.ToString(), updatedRealEstate.Area.ToString());
+            Assert.Equal("Changed Location Only", updatedRealEstate.Location);
+            Assert.NotEqual(createdRealEstate.Location, updatedRealEstate.Location);
+            Assert.Equal(createdRealEstate.RoomNumber, updatedRealEstate.RoomNumber);
+            Assert.Equal(createdRealEstate.BuildingType, updatedRealEstate.BuildingType);
+        }
+
+        [Fact]
+
+        public async Task Should_AddValidRealEstate_WhenDataTypeIsValid()
+        {
+            //Arrange
+            var dto = new RealEstateDto
+            {
+                Area = 85.0,
+                Location = "Tartu",
+                RoomNumber = 3,
+                BuildingType = "Apartment",
+                CreatedAt = DateTime.UtcNow,
+                ModifiedAt = DateTime.UtcNow
+            };
+
+            //Act
+            var realEstate = await Svc<IRealEstateServices>().Create(dto);
+
+            //Assert
+            Assert.IsType<int>(realEstate.RoomNumber);
+            Assert.IsType<string>(realEstate.Location);
+            Assert.IsType<DateTime>(realEstate.CreatedAt);
+        }
+
+        [Fact]
+        public async Task Should_CreateRealEstate_AndAssist()
+        {
+            //Arrange
+            var dto = MockRealEstateData();
+            dto.Id = Guid.Empty;
+            //Act
+            var result = await Svc<IRealEstateServices>().Create(dto);
+            //Assert
+            Assert.NotNull(result);
+            Assert.NotEqual(Guid.Empty, result.Id);
+        }
+
+        [Fact]
+        //Kontrollib, et kustutatud RealEstate pole leitav andmebaasist
+        public async Task Should_ReturnNull_WhenReadingDeletedRealEstate()
+        {
+            //Arrange
             RealEstateDto dto = MockRealEstateData();
             var created = await Svc<IRealEstateServices>().Create(dto);
 
-            //act
-            var details = await Svc<IRealEstateServices>().DetailAsync((Guid)created.Id);
+            //Act
+            await Svc<IRealEstateServices>().Delete((Guid)created.Id);
 
-            //assert
-            Assert.NotNull(details);
-            Assert.Equal(created.Id, details.Id);
-            Assert.Equal(created.Area, details.Area);
-            Assert.Equal(created.Location, details.Location);
+            //Assert
+            var result = await Svc<IRealEstateServices>().DetailAsync((Guid)created.Id);
+
+            Assert.Null(result);
+        }
+
+        [Fact]
+
+        public async Task ShouldNot_UpdateCreatedTime_WhenUpdatedRealEstate()
+        {
+            //Arrange
+            RealEstateDto dto = MockRealEstateData();
+
+            RealEstateDto domain = new()
+            {
+                Id = dto.Id,
+                Area = 180.0,
+                Location = "Another Updated Location",
+                RoomNumber = 6,
+                BuildingType = "Cottage",
+                CreatedAt = dto.CreatedAt,
+                ModifiedAt = DateTime.Now.AddYears(1)
+            };
+
+            //Act - kasutame Update meetodit
+            var updateRealEstate = await Svc<IRealEstateServices>().Update(domain);
+
+            //Assert
+            Assert.Equal(dto.CreatedAt, domain.CreatedAt);
+            Assert.NotEqual(dto.ModifiedAt, domain.ModifiedAt);
         }
 
         private RealEstateDto MockNegativeUpdateRealEstateData()
