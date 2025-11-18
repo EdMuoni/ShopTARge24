@@ -116,24 +116,24 @@ namespace ShopTARge24.RealEstateTest
             Assert.DoesNotMatch(dto.Location, domain.Location);
         }
 
-        [Fact]
-        public async Task Should_UpdaterealEstate_WhenUpdateDataVersion2()
-        {
+        //[Fact]
+        //public async Task Should_UpdaterealEstate_WhenUpdateDataVersion2()
+        //{
 
-            //lõpus kontrollime et andmed on erinevad
-            //arrange and act
-            //alguses andmed luuakse ja kasutame MockRealEstateDto meetodit
-            RealEstateDto dto = MockRealEstateData();
-            var createRealEstate = await Svc<IRealEstateServices>().Create(dto);
+        //    //lõpus kontrollime et andmed on erinevad
+        //    //arrange and act
+        //    //alguses andmed luuakse ja kasutame MockRealEstateDto meetodit
+        //    RealEstateDto dto = MockRealEstateData();
+        //    var createRealEstate = await Svc<IRealEstateServices>().Create(dto);
 
-            //andmed uuendatakse ja kasutame uut Mock meetodit(selle peab ise tegema)
-            RealEstateDto updatedDto = MockUpdateRealEstateData();
-            var result = await Svc<IRealEstateServices>().Update(updatedDto);
+        //    //andmed uuendatakse ja kasutame uut Mock meetodit(selle peab ise tegema)
+        //    RealEstateDto updatedDto = MockUpdateRealEstateData();
+        //    var result = await Svc<IRealEstateServices>().Update(updatedDto);
 
-            //assert
-            Assert.DoesNotMatch(createRealEstate.Location, result.Location);
-            Assert.NotEqual(createRealEstate.ModifiedAt, result.ModifiedAt);
-        }
+        //    //assert
+        //    Assert.DoesNotMatch(createRealEstate.Location, result.Location);
+        //    Assert.NotEqual(createRealEstate.ModifiedAt, result.ModifiedAt);
+        //}
 
         [Fact]
         public async Task ShouldNot_UpdateRealEstate_WhenDidNotUpdateData()

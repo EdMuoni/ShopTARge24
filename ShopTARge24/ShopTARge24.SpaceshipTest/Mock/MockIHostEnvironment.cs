@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Hosting;
 
 
-namespace ShopTARge24.RealEstateTest.Mock
+namespace ShopTARge24.SpaceshipTest.Mock
 {
     public class MockIHostEnvironment : IHostEnvironment
     {
