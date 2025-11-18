@@ -58,13 +58,6 @@ else
             }
         </div>
 
-        <dl>
-            @foreach (var images in Model.Image)
-            {
-                <partial name="_Images" model="images" />
-            }
-        </dl>
-
         @if (Model.Id.HasValue)
         {
             <input asp-action="update" asp-controller="realEstate" type="submit" class="btn btn-success" value="Update" />

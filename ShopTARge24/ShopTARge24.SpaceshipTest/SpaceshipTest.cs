@@ -196,6 +196,7 @@ namespace ShopTARge24.SpaceshipTest
             Assert.NotNull(createSpaceship);
         }
 
+       
 
         private SpaceshipDto MockNullSpaceshipData()
         {

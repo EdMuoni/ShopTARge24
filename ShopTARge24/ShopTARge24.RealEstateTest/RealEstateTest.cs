@@ -1,6 +1,7 @@
 ﻿using Microsoft.Identity.Client;
 using ShopTARge24.Core.Dto;
 using ShopTARge24.Core.ServiceInterface;
+using ShopTARge24.Data;
 using System;
 
 
@@ -548,6 +549,51 @@ namespace ShopTARge24.RealEstateTest
             //Assert
             Assert.Equal(dto.CreatedAt, domain.CreatedAt);
             Assert.NotEqual(dto.ModifiedAt, domain.ModifiedAt);
+        }
+
+        //Kustubab RealEstate andmed koos piltidega
+        [Fact]
+        public async Task Should_DeleteRelatedImages_WhenDeleteRealEstate()
+        {
+            //Arrange
+            var dto = new RealEstateDto
+            {
+                Area = 120.0,
+                Location = "Image Test Location",
+                RoomNumber = 4,
+                BuildingType = "Apartment",
+                CreatedAt = DateTime.UtcNow,
+                ModifiedAt = DateTime.UtcNow
+            };
+
+            var created = await Svc<IRealEstateServices>().Create(dto);
+            var id = (Guid)created.Id;
+
+            var db = Svc<ShopTARge24Context>();
+            db.FileToDatabases.Add(new Core.Domain.FileToDatabase
+            {
+                Id = Guid.NewGuid(),
+                RealEstateId = id,
+                ImageTitle = "kitchen.jpg",
+                ImageData = new byte[] { 1, 2, 3 },
+            });
+
+            db.FileToDatabases.Add(new Core.Domain.FileToDatabase
+            {
+                Id = Guid.NewGuid(),
+                RealEstateId = id,
+                ImageTitle = "livingroom.jpg",
+                ImageData = new byte[] { 4, 5, 6 },
+            });
+            await db.SaveChangesAsync();
+
+            // Act
+            await Svc<IRealEstateServices>().Delete(id);
+
+            // Assert
+            var leftovers = db.FileToDatabases.Where(x => x.RealEstateId == id).ToList();
+
+            Assert.Empty(leftovers);
         }
 
         private RealEstateDto MockNegativeUpdateRealEstateData()

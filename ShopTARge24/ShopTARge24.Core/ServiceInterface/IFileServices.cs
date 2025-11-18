@@ -1,5 +1,6 @@
 ﻿using ShopTARge24.Core.Domain;
 using ShopTARge24.Core.Dto;
+using SQLitePCL;
 
 namespace ShopTARge24.Core.ServiceInterface
 {
@@ -9,5 +10,7 @@ namespace ShopTARge24.Core.ServiceInterface
         Task<FileToApi> RemoveImageFromApi(FileToApiDto dto);
         Task<List<FileToApi>> RemoveImagesFromApi(FileToApiDto[] dtos);
         void UploadFilesToDatabase(RealEstateDto dto, RealEstate domain);
+
+
     }
 }
