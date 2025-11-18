@@ -59,6 +59,7 @@ namespace ShopTARge24.ApplicationServices.Services
             domain.TeacherName = dto.TeacherName;
             domain.CreatedAt = DateTime.UtcNow;
             domain.UpdatedAt = DateTime.UtcNow;
+            _fileServices.FilesToDatabase(dto, domain);
 
             // Save changes to the database
             _context.Kindergartens.Update(domain);

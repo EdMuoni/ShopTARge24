@@ -98,6 +98,38 @@ namespace ShopTARge24.ApplicationServices.Services
             return null;
         }
 
+        public void FilesToDatabase(KindergartenDto dto, Kindergartens domain)
+        {
+            if (dto.Files != null && dto.Files.Count > 0)
+            {
+                if (!Directory.Exists(_webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\"))
+                {
+                    Directory.CreateDirectory(_webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\");
+                }
+
+                foreach (var file in dto.Files)
+                {
+                    string uploadsFolder = Path.Combine(_webHost.ContentRootPath, "wwwroot", "multipleFileUpload");
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+
+                        FileToDatabase path = new FileToDatabase
+                        {
+                            Id = Guid.NewGuid(),
+                            ImageTitle = uniqueFileName,
+                            KindergartenId = domain.Id
+                        };
+
+                        _context.FileToApis.AddAsync(path);
+                    }
+                }
+            }
+        }
+
         public void UploadFilesToDatabase(RealEstateDto dto, RealEstate domain)
         {
             //toimub kontroll, kas on v'hemalt [ks fail v]i mitu
@@ -152,49 +184,6 @@ namespace ShopTARge24.ApplicationServices.Services
             }
         }
 
-
-        //public async Task<FileToDatabases> RemoveImageFromDatabase(FileToDataDto dto)
-        //{
-        //    //kui soovin kustutada, siis pean l'bi Id pildi ülesse otsima
-        //    var imageId = await _context.FileToDatabases
-        //        .FirstOrDefaultAsync(x => x.Id == dto.Id);
-
-        //    //kus asuvad pildid, mida hakatakse kustutama
-        //    var filePath = _webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\"
-        //        + imageId.ExistingFilePath;
-
-        //    if (File.Exists(filePath))
-        //    {
-        //        File.Delete(filePath);
-        //    }
-
-        //    _context.FileToDatabase.Remove(imageId);
-        //    await _context.SaveChangesAsync();
-
-        //    return null;
-        //}
-
-        //public async Task<List<FileToDatabases>> RemoveImagesFromDatabase(FileToDatabases[] dtos)
-        //{
-        //    foreach (var dto in dtos)
-        //    {
-        //        var imageId = await _context.FileToDatabases
-        //            .FirstOrDefaultAsync(x => x.ExistingFilePath == dto.ExistingFilePath);
-
-        //        var filePath = _webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\"
-        //            + imageId.ExistingFilePath;
-
-        //        if (File.Exists(filePath))
-        //        {
-        //            File.Delete(filePath);
-        //        }
-
-        //        _context.FileToDatabases.Remove(imageId);
-        //        await _context.SaveChangesAsync();
-        //    }
-
-        //    return null;
-        //}
 
         public async Task<FileToDatabase> RemoveImageFromDatabase(FileToDatabase dto)
         {

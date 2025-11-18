@@ -166,16 +166,6 @@ namespace ShopTARge24.Controllers
             }
 
 
-            //KindergartenImageViewModel[] images = await FileFromDatabase(id);
-
-            //var images = await _context.FileToApis
-            //    .Where(x => x.KindergartenId == id)
-            //    .Select(y => new ImageViewModel
-            //    {
-            //        Filepath = y.ExistingFilePath,
-            //        Id = y.Id
-            //    }).ToArrayAsync();
-
             ImageViewModel[] images = await FileFromDatabase(id);
 
             var vm = new KindergartenDeleteViewModel();
@@ -215,15 +205,6 @@ namespace ShopTARge24.Controllers
             {
                 return NotFound();
             }
-            //// Get images from file system
-            //var fileSystemImages = await _context.FileToApis
-            //    .Where(x => x.KindergartenId == id)
-            //    .Select(y => new ImageViewModel
-            //    {
-            //        Id = y.Id,
-            //        Filepath = y.ExistingFilePath,
-            //        KindergartenId = y.KindergartenId
-            //    }).ToArrayAsync();
 
             ImageViewModel[] images = await FileFromDatabase(id);
 

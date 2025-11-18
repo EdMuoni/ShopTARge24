@@ -54,6 +54,7 @@
     <Folder Include="Models\OpenWeather\" />
     <Folder Include="Views\OpenWeather\" />
     <Folder Include="wwwroot\multipleFileUpload\" />
+    <Folder Include="wwwroot\multipleFileUpload\" />
   </ItemGroup>
 
 </Project>
