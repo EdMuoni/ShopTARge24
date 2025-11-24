@@ -44,16 +44,20 @@ namespace ShopTARge24KindergartenTest
             Assert.Equal(databaseGuid, guid);
         }
 
-        //Kontrollime, et lasteaeda saab kustutada
         [Fact]
-        public async Task Should_DeleteByIdKindergarten_WhenDeleteKindergarten()
+        public async Task ShouldNot_DeleteByIdKindergarten_WhenDidNotDeleteRealEstate()
         {
             //arrange
-            Guid guid = Guid.Parse("a1b2c3d4-e5f6-7890-abcd-ef1234567890");
+            var dto = MockKindergartenData();
+
             //act
-            var result = await Svc<IKindergartenServices>().Delete(guid);
+            var kinderGarten1 = await Svc<IKindergartenServices>().Create(dto);
+            var kinderGarten2 = await Svc<IKindergartenServices>().Create(dto);
+
+            var result = await Svc<IKindergartenServices>().Delete((Guid)kinderGarten2.Id);
+
             //assert
-            Assert.NotNull(result);
+            Assert.NotEqual(kinderGarten1.Id, result.Id);
         }
 
         //Kontrollime, et lasteaia andmeid saab uuendada
