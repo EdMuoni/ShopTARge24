@@ -37,8 +37,9 @@ namespace ShopTARge24.SpaceshipTest
             Assert.NotEqual(wrongGuid, guid);
         }
 
+        //Uuendab Spaceship andmebaasi
         [Fact]
-        async public Task Should_UpdateSpaceship_WhenUpdateSpaceship()
+        async public Task Should_UpdateSpaceshipData_WhenUpdateSpaceship()
         {
             // Arrange
             SpaceshipDto dto = MockSpaceshipData();
