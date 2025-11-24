@@ -24,24 +24,26 @@ namespace ShopTARge24.ApplicationServices.Services
 
         public async Task<RealEstate> Create(RealEstateDto dto)
         {
-            RealEstate domain = new RealEstate();
+            RealEstate domain = new RealEstate
+            {
+                Id = Guid.NewGuid(),
+                Area = dto.Area,
+                Location = dto.Location,
+                RoomNumber = dto.RoomNumber,
+                BuildingType = dto.BuildingType,
+                CreatedAt = DateTime.Now,
+                ModifiedAt = DateTime.Now
+            };
 
-            domain.Id = Guid.NewGuid();
-            domain.Area = dto.Area;
-            domain.Location = dto.Location;
-            domain.RoomNumber = dto.RoomNumber;
-            domain.BuildingType = dto.BuildingType;
-            domain.CreatedAt = DateTime.Now;
-            domain.ModifiedAt = DateTime.Now;
+            await _context.RealEstates.AddAsync(domain);
+            await _context.SaveChangesAsync(); // Save RealEstate first
 
             if (dto.Files != null)
             {
                 _fileServices.UploadFilesToDatabase(dto, domain);
             }
 
-
-            await _context.RealEstates.AddAsync(domain);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(); // Save FileToDatabase entities
 
             return domain;
         }

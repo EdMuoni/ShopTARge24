@@ -1,4 +1,5 @@
 ﻿using Microsoft.Identity.Client;
+using ShopTARge24.Core.Domain;
 using ShopTARge24.Core.Dto;
 using ShopTARge24.Core.ServiceInterface;
 using ShopTARge24.Data;
@@ -154,6 +155,7 @@ namespace ShopTARge24.RealEstateTest
             //toimub võrdlemine, et andmed ei ole võrdsed
             Assert.NotEqual(createRealEstate.Id, result.Id);
         }
+
 
         //tuleb välja mõelda kolm erinevat xUnit testi RealEstate kohta
         //saate teha 2-3 in meeskonnas
@@ -610,5 +612,7 @@ namespace ShopTARge24.RealEstateTest
 
             return negativeRealEstate;
         }
+
+
     }
 }

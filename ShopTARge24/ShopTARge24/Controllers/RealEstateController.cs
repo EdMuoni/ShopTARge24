@@ -30,7 +30,7 @@ namespace ShopTARge24.Controllers
                 .Select(x => new RealEstateIndexViewModel
                 {
                     Id = x.Id,
-                    Area = x.Area,
+                    Area = (decimal?)x.Area,
                     BuildingType = x.BuildingType,
                     RoomNumber = x.RoomNumber,
                 });
@@ -52,7 +52,7 @@ namespace ShopTARge24.Controllers
             var dto = new RealEstateDto()
             {
                 Id = vm.Id,
-                Area = vm.Area,
+                Area = (double?)vm.Area,
                 BuildingType = vm.BuildingType,
                 RoomNumber = vm.RoomNumber,
                 Location = vm.Location,
@@ -86,7 +86,7 @@ namespace ShopTARge24.Controllers
 
             if (realEstate == null)
             {
-                return NotFound();
+                return View("NotFound", id);
             }
 
             RealEstateImageViewModel[] images = await FileFromDatabase(id);
@@ -95,7 +95,7 @@ namespace ShopTARge24.Controllers
             var vm = new RealEstateCreateUpdateViewModel();
 
             vm.Id = realEstate.Id;
-            vm.Area = realEstate.Area;
+            vm.Area = (decimal?)realEstate.Area;
             vm.BuildingType = realEstate.BuildingType;
             vm.RoomNumber = realEstate.RoomNumber;
             vm.Location = realEstate.Location;
@@ -112,7 +112,7 @@ namespace ShopTARge24.Controllers
             var dto = new RealEstateDto()
             {
                 Id = vm.Id,
-                Area = vm.Area,
+                Area = (double?)vm.Area,
                 BuildingType = vm.BuildingType,
                 RoomNumber = vm.RoomNumber,
                 Location = vm.Location,
@@ -137,7 +137,7 @@ namespace ShopTARge24.Controllers
 
             if (realEstate == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             RealEstateImageViewModel[] images = await FileFromDatabase(id);
@@ -172,20 +172,22 @@ namespace ShopTARge24.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(Guid id)
         {
+          
             //kasutada service classi meetodit, et info k'tte saada
             var realEstate = await _realEstateServices.DetailAsync(id);
 
             if (realEstate == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
+
 
             RealEstateImageViewModel[] images = await FileFromDatabase(id);
 
             var vm = new RealEstateDetailsViewModel();
 
             vm.Id = realEstate.Id;
-            vm.Area = realEstate.Area;
+            vm.Area = (decimal?)realEstate.Area;
             vm.BuildingType = realEstate.BuildingType;
             vm.RoomNumber = realEstate.RoomNumber;
             vm.Location = realEstate.Location;
