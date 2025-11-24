@@ -6,47 +6,131 @@ namespace ShopTARge24KindergartenTest
 {
     public class KindergartenTest : TestBase
     {
-        private RealEstateDto MockRealEstateData()
+        //Kontrollime, et tühja andmetega lasteaeda ei saa lisada
+        [Fact]
+        public async Task ShouldNot_AddEmptyKindergarten_WhenReturnResult()
         {
-            return new RealEstateDto
+            // Arrange
+            KindergartenDto dto = MockNullKindergartenData();
+            // Act
+            var result = await Svc<IKindergartenServices>().Create(dto);
+            // Assert
+            Assert.NotNull(result);
+        }
+
+        //Kontrollime, et vale ID-ga lasteaeda ei saa kätte
+        [Fact]
+        public async Task ShouldNot_GetByIdKindergarten_WhenReturnsNotEqual()
+        {
+            //arrange
+            Guid wrongGuid = Guid.NewGuid();
+            Guid guid = Guid.Parse("a1b2c3d4-e5f6-7890-abcd-ef1234567890");
+            //act
+            await Svc<IKindergartenServices>().DetailAsync(guid);
+            //assert
+            Assert.NotEqual(wrongGuid, guid);
+        }
+
+        //Kontrollime, et õige ID-ga lasteaed saab kätte
+        [Fact]
+        public async Task Should_GetByIdKindergarten_WhenReturnsEqual()
+        {
+            //arrange
+            Guid databaseGuid = Guid.Parse("a1b2c3d4-e5f6-7890-abcd-ef1234567890");
+            Guid guid = Guid.Parse("a1b2c3d4-e5f6-7890-abcd-ef1234567890");
+            //act
+            await Svc<IKindergartenServices>().DetailAsync(guid);
+            //assert
+            Assert.Equal(databaseGuid, guid);
+        }
+
+        //Kontrollime, et lasteaeda saab kustutada
+        [Fact]
+        public async Task Should_DeleteByIdKindergarten_WhenDeleteKindergarten()
+        {
+            //arrange
+            Guid guid = Guid.Parse("a1b2c3d4-e5f6-7890-abcd-ef1234567890");
+            //act
+            var result = await Svc<IKindergartenServices>().Delete(guid);
+            //assert
+            Assert.NotNull(result);
+        }
+
+        //Kontrollime, et lasteaia andmeid saab uuendada
+        [Fact]
+        public async Task Should_UpdateKindergarten_WhenUpdateKindergartenData()
+        {
+            //arrange
+            KindergartenDto dto = MockKindergartenData();
+
+            //act
+
+            //assert
+
+        }
+
+        //Kontrollime, et negatiivse laste arvuga lasteaeda ei saa lisada
+        [Fact]
+        public async Task ShouldNot_AddKindergartenWithNegativeChildrenCount_WhenReturnResult()
+        {
+            // Arrange
+            KindergartenDto dto = new()
             {
-                Area = 150.0,
+                GroupName = "Negative Children Count Location",
+                ChildrenCount = -5,
+                KindergartenName = "Negative House",
+                TeacherName = "Jane Doe",
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+            // Act
+            var result = await Svc<IKindergartenServices>().Create(dto);
+            // Assert
+            Assert.NotNull(result);
+        }
+
+
+
+        private KindergartenDto MockKindergartenData()
+        {
+            return new KindergartenDto
+            {
                 GroupName = "Sample Location",
                 ChildrenCount = 4,
                 KindergartenName = "House",
                 TeacherName = "John Doe",
                 CreatedAt = DateTime.UtcNow,
-                ModifiedAt = DateTime.UtcNow
+                UpdatedAt = DateTime.UtcNow
             };
         }
 
-        private RealEstateDto MockUpdateRealEstateData()
+        private KindergartenDto MockUpdateKindergartenData()
         {
-            RealEstateDto realEstate = new()
+            KindergartenDto kinderGarten = new()
             {
-                Area = 100.0,
-                Location = "Secret Location",
-                RoomNumber = 7,
-                BuildingType = "Hideout",
-                CreatedAt = DateTime.Now.AddYears(1),
-                ModifiedAt = DateTime.Now.AddYears(1)
+                GroupName = "New Name",
+                ChildrenCount = 8,
+                KindergartenName = "Apartmen",
+                TeacherName = "Sam Doe",
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             };
 
-            return realEstate;
+            return kinderGarten;
         }
-        private RealEstateDto MockNullRealEstateData()
+        private KindergartenDto MockNullKindergartenData()
         {
-            RealEstateDto realEstate = new()
+            KindergartenDto kinderGarten = new()
             {
-                Area = null,
-                Location = "",
-                RoomNumber = null,
-                BuildingType = "",
+                GroupName = "",
+                ChildrenCount = null,
+                KindergartenName = "",
+                TeacherName = "",
                 CreatedAt = null,
-                ModifiedAt = null
+                UpdatedAt = null
             };
 
-            return realEstate;
+            return kinderGarten;
         }
     }
 
