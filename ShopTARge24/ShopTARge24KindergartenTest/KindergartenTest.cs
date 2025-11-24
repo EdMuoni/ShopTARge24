@@ -62,10 +62,14 @@ namespace ShopTARge24KindergartenTest
         {
             //arrange
             KindergartenDto dto = MockKindergartenData();
-
             //act
-
+            var createKindergarten = await Svc<IKindergartenServices>().Create(dto);
+            var updateKindergarten = MockUpdateKindergartenData();
             //assert
+            Assert.NotEqual(createKindergarten.GroupName, updateKindergarten.GroupName);
+            Assert.NotEqual(createKindergarten.ChildrenCount, updateKindergarten.ChildrenCount);
+            Assert.NotEqual(createKindergarten.KindergartenName, updateKindergarten.KindergartenName);
+            Assert.NotEqual(createKindergarten.TeacherName, updateKindergarten.TeacherName);
 
         }
 
