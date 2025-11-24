@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopTARge24.Data", "ShopTAR
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopTARge24.RealEstateTest", "ShopTARge24.RealEstateTest\ShopTARge24.RealEstateTest.csproj", "{D8D87CA2-AD65-4001-9E48-CDA0A577C117}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopTARge24KindergartenTest", "ShopTARge24KindergartenTest\ShopTARge24KindergartenTest.csproj", "{634A0E3D-7016-484F-83AF-5A7708F2E6E3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{D8D87CA2-AD65-4001-9E48-CDA0A577C117}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8D87CA2-AD65-4001-9E48-CDA0A577C117}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8D87CA2-AD65-4001-9E48-CDA0A577C117}.Release|Any CPU.Build.0 = Release|Any CPU
+		{634A0E3D-7016-484F-83AF-5A7708F2E6E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{634A0E3D-7016-484F-83AF-5A7708F2E6E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{634A0E3D-7016-484F-83AF-5A7708F2E6E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{634A0E3D-7016-484F-83AF-5A7708F2E6E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
