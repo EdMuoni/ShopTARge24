@@ -30,7 +30,7 @@ namespace ShopTARge24.Controllers
                 .Select(x => new RealEstateIndexViewModel
                 {
                     Id = x.Id,
-                    Area = (decimal?)x.Area,
+                    Area = x.Area,
                     BuildingType = x.BuildingType,
                     RoomNumber = x.RoomNumber,
                 });
@@ -52,7 +52,7 @@ namespace ShopTARge24.Controllers
             var dto = new RealEstateDto()
             {
                 Id = vm.Id,
-                Area = (double?)vm.Area,
+                Area = vm.Area,
                 BuildingType = vm.BuildingType,
                 RoomNumber = vm.RoomNumber,
                 Location = vm.Location,
@@ -95,7 +95,7 @@ namespace ShopTARge24.Controllers
             var vm = new RealEstateCreateUpdateViewModel();
 
             vm.Id = realEstate.Id;
-            vm.Area = (decimal?)realEstate.Area;
+            vm.Area = realEstate.Area;
             vm.BuildingType = realEstate.BuildingType;
             vm.RoomNumber = realEstate.RoomNumber;
             vm.Location = realEstate.Location;
@@ -112,7 +112,7 @@ namespace ShopTARge24.Controllers
             var dto = new RealEstateDto()
             {
                 Id = vm.Id,
-                Area = (double?)vm.Area,
+                Area = vm.Area,
                 BuildingType = vm.BuildingType,
                 RoomNumber = vm.RoomNumber,
                 Location = vm.Location,
@@ -187,7 +187,7 @@ namespace ShopTARge24.Controllers
             var vm = new RealEstateDetailsViewModel();
 
             vm.Id = realEstate.Id;
-            vm.Area = (decimal?)realEstate.Area;
+            vm.Area = realEstate.Area;
             vm.BuildingType = realEstate.BuildingType;
             vm.RoomNumber = realEstate.RoomNumber;
             vm.Location = realEstate.Location;
