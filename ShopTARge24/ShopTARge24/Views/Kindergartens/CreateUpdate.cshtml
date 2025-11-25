@@ -19,28 +19,28 @@ else
         <div class="form-group row">
             <label asp-for="GroupName" class="col-sm-2 col-form-label"></label>
             <div class="col-sm-10">
-                <input asp-for="GroupName" class="form-control" />
+                <input asp-for="GroupName" class="form-control" id="GroupNameInput" />
             </div>
         </div>
 
         <div class="form-group row">
             <label asp-for="ChildrenCount" class="col-sm-2 col-form-label"></label>
             <div class="col-sm-10">
-                <input asp-for="ChildrenCount" class="form-control" />
+                <input asp-for="ChildrenCount" class="form-control" id="ChildrenCountInput" />
             </div>
         </div>
 
         <div class="form-group row">
             <label asp-for="KindergartenName" class="col-sm-2 col-form-label"></label>
             <div class="col-sm-10">
-                <input asp-for="KindergartenName" class="form-control" />
+                <input asp-for="KindergartenName" class="form-control" id="KindergartenNameInput" />
             </div>
         </div>
 
         <div class="form-group row">
             <label asp-for="TeacherName" class="col-sm-2 col-form-label"></label>
             <div class="col-sm-10">
-                <input asp-for="TeacherName" class="form-control" />
+                <input asp-for="TeacherName" class="form-control" id="TeacherNameInput" />
             </div>
         </div>
 
@@ -56,18 +56,18 @@ else
         @foreach (var images in Model.Image)
         {
             <partial name="_Images" model="images" />
-            <input asp-action="removeImage" asp-controller="kindergartens" asp-route-imageId="@images.ImageId" type="submit" class="btn btn-success" value="Remove Image" />
+            <input asp-action="removeImage" asp-controller="kindergartens" asp-route-imageId="@images.ImageId" type="submit" class="btn btn-success" value="Remove Image" id="RemoveImageInput" />
         }
 
         @if (Model.Id.HasValue)
         {
-            <input asp-action="update" asp-controller="kindergartens" type="submit" class="btn btn-success" value="Update" />
+            <input asp-action="update" asp-controller="kindergartens" type="submit" class="btn btn-success" value="Update" id="UpdateButtonAction" />
         }
         else
         {
-            <input asp-action="create" asp-controller="kindergartens" type="submit" class="btn btn-success" value="Create" />
+            <input asp-action="create" asp-controller="kindergartens" type="submit" class="btn btn-success" value="Create" id="CreateButtonAction" />
         }
 
-        <a asp-action="Index" asp-controller="kindergartens" class="btn btn-success">Back</a>
+        <a asp-action="Index" asp-controller="kindergartens" class="btn btn-success" id="BackButtonAction">Back</a>
     </form>
 </div>
