@@ -34,7 +34,7 @@ namespace ShopTARge24.ApplicationServices.Services
 
                 foreach (var file in dto.Files)
                 {
-                    string uploadsFolder = Path.Combine(_webHost.ContentRootPath,"wwwroot", "multipleFileUpload");
+                    string uploadsFolder = Path.Combine(_webHost.ContentRootPath, "wwwroot", "multipleFileUpload");
                     string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
                     string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
@@ -101,7 +101,7 @@ namespace ShopTARge24.ApplicationServices.Services
         public void UploadFilesToDatabase(RealEstateDto dto, RealEstate domain)
         {
             //toimub kontroll, kas on v'hemalt [ks fail v]i mitu
-            if(dto.Files != null && dto.Files.Count > 0)
+            if (dto.Files != null && dto.Files.Count > 0)
             {
                 //tuleb kasutada foreachi et mitu faili [lesse laadida
                 foreach (var file in dto.Files)
@@ -123,6 +123,19 @@ namespace ShopTARge24.ApplicationServices.Services
                     }
                 }
             }
+        }
+
+        public async Task<FileToDatabase> RemoveImageFromDatabase(FileToDatabaseDto dto)
+        {
+            // Find the image by Id
+            var image = await _context.FileToDatabases
+                .Where (x => x.Id == dto.Id)
+                .FirstOrDefaultAsync();
+            
+            _context.FileToDatabases.Remove(image);
+            await _context.SaveChangesAsync();
+
+            return image;
         }
     }
 }
