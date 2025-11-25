@@ -1,10 +1,19 @@
-﻿namespace ShopTARge24.Models.RealEstate
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ShopTARge24.Models.RealEstate
 {
     public class RealEstateCreateUpdateViewModel
     {
         public Guid? Id { get; set; }
+
+        [Range(1, double.MaxValue, ErrorMessage = "Value cannot be negative.")]
         public decimal? Area { get; set; }
+
+        //[Required]
         public string? Location { get; set; }
+
+        //[Range(1, double.MaxValue, ErrorMessage = "Value cannot be negative.")]
+        [Range(1, 1000)]
         public int? RoomNumber { get; set; }
         public string? BuildingType { get; set; }
 
