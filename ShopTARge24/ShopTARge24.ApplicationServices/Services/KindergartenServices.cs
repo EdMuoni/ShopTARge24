@@ -59,7 +59,11 @@ namespace ShopTARge24.ApplicationServices.Services
             domain.TeacherName = dto.TeacherName;
             domain.CreatedAt = DateTime.UtcNow;
             domain.UpdatedAt = DateTime.UtcNow;
-            _fileServices.FilesToDatabase(dto, domain);
+
+            if (dto.Files != null)
+            {
+                _fileServices.UploadFilesToDatabase(dto, domain);
+            }
 
             // Save changes to the database
             _context.Kindergartens.Update(domain);
@@ -81,23 +85,17 @@ namespace ShopTARge24.ApplicationServices.Services
             var result = await _context.Kindergartens
                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            if (result == null)
-            {
-                return null;
-            }
-
             var images = await _context.FileToDatabases
                 .Where(x => x.KindergartenId == id)
-                .Select(y => new FileToDatabase
+                .Select(y => new FileToDatabaseDto
                 {
                     Id = y.Id,
                     KindergartenId = y.KindergartenId,
-                    ImageData = y.ImageData,
                     ImageTitle = y.ImageTitle,
                 }).ToArrayAsync();
 
-            _context.Kindergartens.Remove(result);
-            await _fileServices.RemoveImagesFromDatabase(images);
+            await RemoveImagesFromDatabase(images);
+            _context.Remove(result);
             await _context.SaveChangesAsync();
 
             return result;

@@ -98,33 +98,28 @@ namespace ShopTARge24.ApplicationServices.Services
             return null;
         }
 
-        public void FilesToDatabase(KindergartenDto dto, Kindergartens domain)
+        public void UploadFilesToDatabase(KindergartenDto dto, Kindergartens domain)
         {
+            //toimub kontroll, kas on v'hemalt [ks fail v]i mitu
             if (dto.Files != null && dto.Files.Count > 0)
             {
-                if (!Directory.Exists(_webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\"))
-                {
-                    Directory.CreateDirectory(_webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\");
-                }
-
+                //tuleb kasutada foreachi et mitu faili [lesse laadida
                 foreach (var file in dto.Files)
                 {
-                    string uploadsFolder = Path.Combine(_webHost.ContentRootPath, "wwwroot", "multipleFileUpload");
-                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
-                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    //foreachi sees tuleb kasutada using-t
+                    using (var target = new MemoryStream())
                     {
-                        file.CopyTo(fileStream);
-
-                        FileToDatabase path = new FileToDatabase
+                        FileToDatabase files = new FileToDatabase()
                         {
                             Id = Guid.NewGuid(),
-                            ImageTitle = uniqueFileName,
+                            ImageTitle = file.FileName,
                             KindergartenId = domain.Id
                         };
 
-                        _context.FileToApis.AddAsync(path);
+                        file.CopyTo(target);
+                        files.ImageData = target.ToArray();
+
+                        _context.FileToDatabases.Add(files);
                     }
                 }
             }
@@ -157,65 +152,33 @@ namespace ShopTARge24.ApplicationServices.Services
             }
         }
 
-        public void UploadFilesToDatabase(KindergartenDto dto, Kindergartens domain)
+
+        public async Task<FileToDatabase> RemoveImagesFromDatabase(FileToDatabaseDto[] dtos)
         {
-            //toimub kontroll, kas on v'hemalt [ks fail v]i mitu
-            if (dto.Files != null && dto.Files.Count > 0)
+            foreach (var dto in dtos)
             {
-                //tuleb kasutada foreachi et mitu faili [lesse laadida
-                foreach (var file in dto.Files)
-                {
-                    //foreachi sees tuleb kasutada using-t
-                    using (var target = new MemoryStream())
-                    {
-                        FileToDatabase files = new FileToDatabase()
-                        {
-                            Id = Guid.NewGuid(),
-                            ImageTitle = file.FileName,
-                            KindergartenId = domain.Id
-                        };
+                var imageId = await _context.FileToDatabases
+                    .Where(x => x.Id == dto.Id)
+                    .FirstOrDefaultAsync(x => x.Id == dto.Id);
 
-                        file.CopyTo(target);
-                        files.ImageData = target.ToArray();
-
-                        _context.FileToDatabases.Add(files);
-                    }
-                }
+                _context.FileToDatabases.Remove(imageId);
+                await _context.SaveChangesAsync();
             }
+
+            return null;
         }
 
-
-        public async Task<FileToDatabase> RemoveImageFromDatabase(FileToDatabase dto)
+        public async Task<FileToDatabase> RemoveImageFromDatabase(FileToDatabaseDto dto)
         {
+            // Find the image by Id
             var image = await _context.FileToDatabases
-                .FirstOrDefaultAsync(x => x.Id == dto.Id);
-
-            if (image == null)
-            {
-                return null;
-            }
+                .Where(x => x.Id == dto.Id)
+                .FirstOrDefaultAsync();
 
             _context.FileToDatabases.Remove(image);
             await _context.SaveChangesAsync();
 
-            return null;
-        }
-
-        public async Task<List<FileToDatabase>> RemoveImagesFromDatabase(FileToDatabase[] dtos)
-        {
-            foreach (var dto in dtos)
-            {
-                var image = await _context.FileToDatabases
-                    .FirstOrDefaultAsync(x => x.Id == dto.Id);
-
-                if (image != null)
-                {
-                    _context.FileToDatabases.Remove(image);
-                    await _context.SaveChangesAsync();
-                }
-            }
-
-            return null;
+            return image;
         }
     }
 
