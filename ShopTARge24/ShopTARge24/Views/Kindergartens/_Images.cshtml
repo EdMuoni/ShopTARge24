@@ -1,18 +1,6 @@
 ﻿@model ShopTARge24.Models.Kindergartens.ImageViewModel
 
-<div class="image-container">
-    <img src="@Url.Content($"~/{Model.Filepath}")" alt="Image" class="img-thumbnail" />
-</div>
-
-
-
-@* @model ShopTARge24.Models.Kindergartens.ImageViewModel
-
-@{
-    var photoPaths = "~/multipleFileUpload/" + (Model.Filepath ?? "noimage.jpg");
-}
-
 <div class="form-group row col-sm-4 offset-2">
-    <div>@Model.Filepath</div>
-    <img class="card-image-top" src="@photoPaths" asp-append-version="true" />
-</div> *@
+    <div>@Model.ImageTitle</div>
+    <img class="card-img-top" src="@Model.Image" asp-append-version="true" />
+</div>
