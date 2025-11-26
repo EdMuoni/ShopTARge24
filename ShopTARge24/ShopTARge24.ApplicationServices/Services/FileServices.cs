@@ -172,7 +172,7 @@ namespace ShopTARge24.ApplicationServices.Services
         {
             // Find the image by Id
             var image = await _context.FileToDatabases
-                .Where(x => x.Id == dto.Id)
+                .Where(x => x.imageId == dto.Id)
                 .FirstOrDefaultAsync();
 
             _context.FileToDatabases.Remove(image);
