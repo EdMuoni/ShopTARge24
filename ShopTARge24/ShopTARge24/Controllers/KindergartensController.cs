@@ -138,12 +138,14 @@ namespace ShopTARge24.Controllers
 
             var result = await _kindergartenServices.Update(dto);
 
+            var kinderGartenId = result.Id;
+
             if (result == null)
             {
                 return RedirectToAction(nameof(Index));
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Update), new { id = kinderGartenId });
 
         }
 
@@ -228,6 +230,30 @@ namespace ShopTARge24.Controllers
                     ImageTitle = y.ImageTitle,
                     Image = string.Format("data:image/gif;base64,{0}", Convert.ToBase64String(y.ImageData))
                 }).ToArrayAsync();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveImage(ImageViewModel vm)
+        {
+            //tuleb ühendada dto ja vm
+            //Id peab saama edastatud andmebaasi
+            var dto = new FileToDatabaseDto()
+            {
+                Id = vm.Id
+            };
+
+            //kutsu välja vastav serviceclassi meetod
+            var image = await _fileServices.RemoveImageFromDatabase(dto);
+
+            var kinderGartenId = image.KindergartenId;
+
+            //kui on null, siis vii Index vaatesse
+            if (image == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return RedirectToAction(nameof(Update), new { id = kinderGartenId });
         }
 
     }
