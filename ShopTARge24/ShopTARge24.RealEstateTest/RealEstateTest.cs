@@ -16,7 +16,7 @@ namespace ShopTARge24.RealEstateTest
             // Arrange
             RealEstateDto dto = new()
             {
-                Area = 120.5,
+                Area = 120,
                 Location = "Test Location",
                 RoomNumber = 3,
                 BuildingType = "Apartment",
@@ -99,7 +99,7 @@ namespace ShopTARge24.RealEstateTest
             RealEstateDto domain = new();
 
             domain.Id = Guid.Parse("68ce7565-9105-4945-b428-b8e25ec061c6");
-            domain.Area = 200.0;
+            domain.Area = 200;
             domain.Location = "Updated Location";
             domain.RoomNumber = 5;
             domain.BuildingType = "Villa";
@@ -179,7 +179,7 @@ namespace ShopTARge24.RealEstateTest
         {
             return new RealEstateDto
             {
-                Area = 150.0,
+                Area = 150,
                 Location = "Sample Location",
                 RoomNumber = 4,
                 BuildingType = "House",
@@ -192,7 +192,7 @@ namespace ShopTARge24.RealEstateTest
         {
             RealEstateDto realEstate = new()
             {
-                Area = 100.0,
+                Area = 100,
                 Location = "Sample Location",
                 RoomNumber = 7,
                 BuildingType = "Hideout",
@@ -234,7 +234,7 @@ namespace ShopTARge24.RealEstateTest
             //Loome DTO negatiivse väärtustega
             RealEstateDto dto = new()
             {
-                Area = -120.5, //Negatiivne pindala
+                Area = -120, //Negatiivne pindala
                 Location = "Test Location",
                 RoomNumber = 3,
                 BuildingType = "Apartment",
@@ -480,7 +480,7 @@ namespace ShopTARge24.RealEstateTest
             //Arrange
             var dto = new RealEstateDto
             {
-                Area = 85.0,
+                Area = 85,
                 Location = "Tartu",
                 RoomNumber = 3,
                 BuildingType = "Apartment",
@@ -537,7 +537,7 @@ namespace ShopTARge24.RealEstateTest
             RealEstateDto domain = new()
             {
                 Id = dto.Id,
-                Area = 180.0,
+                Area = 180,
                 Location = "Another Updated Location",
                 RoomNumber = 6,
                 BuildingType = "Cottage",
@@ -560,7 +560,7 @@ namespace ShopTARge24.RealEstateTest
             //Arrange
             var dto = new RealEstateDto
             {
-                Area = 120.0,
+                Area = 120,
                 Location = "Image Test Location",
                 RoomNumber = 4,
                 BuildingType = "Apartment",
@@ -602,7 +602,7 @@ namespace ShopTARge24.RealEstateTest
         {
             RealEstateDto negativeRealEstate = new()
             {
-                Area = -100.0,
+                Area = -100,
                 Location = "Secret Location",
                 RoomNumber = -7,
                 BuildingType = "Hideout",
