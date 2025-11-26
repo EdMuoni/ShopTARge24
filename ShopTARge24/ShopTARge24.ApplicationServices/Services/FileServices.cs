@@ -98,6 +98,7 @@ namespace ShopTARge24.ApplicationServices.Services
             return null;
         }
 
+
         public void UploadFilesToDatabase(RealEstateDto dto, RealEstate domain)
         {
             //toimub kontroll, kas on v'hemalt [ks fail v]i mitu
@@ -125,6 +126,7 @@ namespace ShopTARge24.ApplicationServices.Services
             }
         }
 
+
         public async Task<FileToDatabase> RemoveImagesFromDatabase(FileToDatabaseDto[] dtos)
         {
             foreach (var dto in dtos)
@@ -144,13 +146,14 @@ namespace ShopTARge24.ApplicationServices.Services
         {
             // Find the image by Id
             var image = await _context.FileToDatabases
-                .Where (x => x.Id == dto.Id)
+                .Where(x => x.Id == dto.Id)
                 .FirstOrDefaultAsync();
-            
+
             _context.FileToDatabases.Remove(image);
             await _context.SaveChangesAsync();
 
             return image;
         }
     }
+
 }
