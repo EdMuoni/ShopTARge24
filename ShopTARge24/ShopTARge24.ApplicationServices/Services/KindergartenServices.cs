@@ -27,15 +27,15 @@ namespace ShopTARge24.ApplicationServices.Services
         {
 
             Kindergartens domain = new Kindergartens();
-            
-                domain.Id = Guid.NewGuid();
-                domain.GroupName = dto.GroupName;
-                domain.ChildrenCount = dto.ChildrenCount;
-                domain.KindergartenName = dto.KindergartenName;
-                domain.TeacherName = dto.TeacherName;
-                domain.CreatedAt = DateTime.UtcNow;
-                domain.UpdatedAt = DateTime.UtcNow;
-            
+
+            domain.Id = Guid.NewGuid();
+            domain.GroupName = dto.GroupName;
+            domain.ChildrenCount = dto.ChildrenCount;
+            domain.KindergartenName = dto.KindergartenName;
+            domain.TeacherName = dto.TeacherName;
+            domain.CreatedAt = DateTime.UtcNow;
+            domain.UpdatedAt = DateTime.UtcNow;
+
 
             if (dto.Files != null)
             {
@@ -101,6 +101,21 @@ namespace ShopTARge24.ApplicationServices.Services
             await _context.SaveChangesAsync();
 
             return result;
+        }
+
+        public async Task<FileToDatabase> RemoveImagesFromDatabase(FileToDatabaseDto[] dtos)
+        {
+            foreach (var dto in dtos)
+            {
+                var imageId = await _context.FileToDatabases
+                 .Where(x => x.Id == dto.Id)
+                .FirstOrDefaultAsync(x => x.Id == dto.Id);
+
+                _context.FileToDatabases.Remove(imageId);
+                await _context.SaveChangesAsync();
+            }
+
+            return null;
         }
     }
 }

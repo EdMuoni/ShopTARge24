@@ -6,6 +6,7 @@ using ShopTARge24.Core.Dto;
 using ShopTARge24.Core.ServiceInterface;
 using ShopTARge24.Data;
 using ShopTARge24.Models.Kindergartens;
+using ShopTARge24.Models.RealEstate;
 
 
 
@@ -97,15 +98,7 @@ namespace ShopTARge24.Controllers
                 return NotFound();
             }
 
-            var images = await _context.FileToDatabases
-                .Where(x => x.KindergartenId == id)
-                .Select(y => new ImageViewModel
-                {
-                    Filepath = y.ImageTitle,
-                    Id = y.Id
-                }).ToArrayAsync();
-
-            //ImageViewModel[] images = await FileFromDatabase(id);
+            ImageViewModel[] images = await FileFromDatabase(id);
 
             var vm = new KindergartenCreateUpdateViewModel();
 
@@ -235,27 +228,6 @@ namespace ShopTARge24.Controllers
                     ImageTitle = y.ImageTitle,
                     Image = string.Format("data:image/gif;base64,{0}", Convert.ToBase64String(y.ImageData))
                 }).ToArrayAsync();
-        }
-
-        public async Task<IActionResult> RemoveImage(ImageViewModel vm)
-        {
-            //tuleb ühendada dto ja vm
-            //Id peab saama edastatud andmebaasi
-            var dto = new FileToDatabase()
-            {
-                Id = vm.Id
-            };
-
-            //kutsu välja vastav serviceclassi meetod
-            var image = await _fileServices.RemoveImageFromDatabase(dto);
-
-            //kui on null, siis vii Index vaatesse
-            if (image == null)
-            {
-                return RedirectToAction(nameof(Index));
-            }
-
-            return RedirectToAction(nameof(Index));
         }
 
     }
