@@ -71,7 +71,7 @@ namespace ShopTARge24.Controllers
                 Image = vm.Image
                     .Select(x => new FileToDatabaseDto
                     {
-                        Id = x.Id,
+                        Id = x.ImageId,
                         ImageData = x.ImageData,
                         ImageTitle = x.ImageTitle,
                         KindergartenId = x.KindergartenId
@@ -130,7 +130,7 @@ namespace ShopTARge24.Controllers
                 Image = vm.Image
                     .Select(x => new FileToDatabaseDto
                     {
-                        Id = x.Id,
+                        Id = x.ImageId,
                         ImageTitle = x.ImageTitle,
                         KindergartenId = x.KindergartenId
                     }).ToArray()
@@ -224,7 +224,7 @@ namespace ShopTARge24.Controllers
                 .Where(x => x.KindergartenId == id)
                 .Select(y => new ImageViewModel
                 {
-                    Id = y.Id,
+                    ImageId = y.Id,
                     KindergartenId = y.Id,
                     ImageData = y.ImageData,
                     ImageTitle = y.ImageTitle,
@@ -239,7 +239,7 @@ namespace ShopTARge24.Controllers
             //Id peab saama edastatud andmebaasi
             var dto = new FileToDatabaseDto()
             {
-                Id = vm.Id
+                Id = vm.ImageId
             };
 
             //kutsu välja vastav serviceclassi meetod
