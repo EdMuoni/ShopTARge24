@@ -17,11 +17,19 @@
                 <label asp-for="Name" class="col-sm-2 col-form-label"></label>
                 @Html.DisplayFor(model => model.Name)
             </div>
+
+        <div id="testIdName_D">
+            @Html.DisplayFor(model => model.Name)
+        </div>
         </dl>
 
         <dl class="row">
             <div class="form-group row">
                 <label asp-for="Classification" class="col-sm-2 col-form-label"></label>
+                @Html.DisplayFor(model => model.Classification)
+            </div>
+
+            <div id="testIdClassification_D">
                 @Html.DisplayFor(model => model.Classification)
             </div>
         </dl>
@@ -31,6 +39,11 @@
                 <label asp-for="BuiltDate" class="col-sm-2 col-form-label"></label>
                 @Html.DisplayFor(model => model.BuiltDate)
             </div>
+
+            <div id="testIdBuiltDate_D">
+                @Html.DisplayFor(model => model.BuiltDate)
+            </div>
+
         </dl>
 
         <dl class="row">
@@ -38,11 +51,20 @@
                 <label asp-for="Crew" class="col-sm-2 col-form-label"></label>
                 @Html.DisplayFor(model => model.Crew)
             </div>
+
+            <div id="testIdCrew_D">
+                @Html.DisplayFor(model => model.Crew)
+            </div>
+
         </dl>
 
         <dl class="row">
             <div class="form-group row">
                 <label asp-for="EnginePower" class="col-sm-2 col-form-label"></label>
+                @Html.DisplayFor(model => model.EnginePower)
+            </div>
+
+            <div id="testIdEnginePower_D">
                 @Html.DisplayFor(model => model.EnginePower)
             </div>
         </dl>
@@ -52,11 +74,19 @@
                 <label asp-for="CreatedAt" class="col-sm-2 col-form-label"></label>
                 @Html.DisplayFor(model => model.CreatedAt)
             </div>
+
+            <div id="testIdCreatedAt_D">
+                @Html.DisplayFor(model => model.CreatedAt)
+            </div>
         </dl>
 
         <dl class="row">
             <div class="form-group row">
                 <label asp-for="ModifiedAt" class="col-sm-2 col-form-label"></label>
+                @Html.DisplayFor(model => model.ModifiedAt)
+            </div>
+
+            <div id="testIdModifiedAt_D">
                 @Html.DisplayFor(model => model.ModifiedAt)
             </div>
         </dl>

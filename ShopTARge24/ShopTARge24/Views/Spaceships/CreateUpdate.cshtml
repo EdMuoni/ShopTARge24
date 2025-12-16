@@ -19,35 +19,35 @@ else
         <div class="form-group row">
             <label asp-for="Name" class="col-sm-2 col-form-label"></label>
             <div class="col-sm-10">
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control" id="NameInput"/>
             </div>
         </div>
 
         <div class="form-group row">
             <label asp-for="Classification" class="col-sm-2 col-form-label"></label>
             <div class="col-sm-10">
-                <input asp-for="Classification" class="form-control" />
+                <input asp-for="Classification" class="form-control" id="ClassificationInput" />
             </div>
         </div>
 
         <div class="form-group row">
             <label asp-for="BuiltDate" class="col-sm-2 col-form-label"></label>
             <div class="col-sm-10">
-                <input asp-for="BuiltDate" class="form-control" />
+                <input asp-for="BuiltDate" class="form-control" id="BuiltDateInput" />
             </div>
         </div>
 
         <div class="form-group row">
             <label asp-for="Crew" class="col-sm-2 col-form-label"></label>
             <div class="col-sm-10">
-                <input asp-for="Crew" class="form-control" />
+                <input asp-for="Crew" class="form-control" id="CrewInput"   />
             </div>
         </div>
 
         <div class="form-group row">
             <label asp-for="EnginePower" class="col-sm-2 col-form-label"></label>
             <div class="col-sm-10">
-                <input asp-for="EnginePower" class="form-control" />
+                <input asp-for="EnginePower" class="form-control" id="EnginePowerInput"  />
             </div>
         </div>
 
@@ -68,13 +68,13 @@ else
 
         @if (Model.Id.HasValue)
         {
-            <input asp-action="update" asp-controller="spaceships" type="submit" class="btn btn-success" value="Update" />
+            <input asp-action="update" asp-controller="spaceships" type="submit" class="btn btn-success" value="Update" id="UpdateButtonAction" />
         }
         else
         {
-            <input asp-action="create" asp-controller="spaceships" type="submit" class="btn btn-success" value="Create" />
+            <input asp-action="create" asp-controller="spaceships" type="submit" class="btn btn-success" value="Create" id="CreateButtonAction" />
         }
 
-        <a asp-action="Index" asp-controller="spaceships" class="btn btn-success">Back</a>
+        <a asp-action="Index" asp-controller="spaceships" class="btn btn-success" id="BackButtonAction">Back</a>
     </form>
 </div>
